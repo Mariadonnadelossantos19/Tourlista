@@ -1,0 +1,293 @@
+<?php
+  $page = "add_consultancy";
+  include 'template/header.php';
+?>
+ <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Consultancy</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Consultancy</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- SELECT2 EXAMPLE -->
+        <form action="../backend/add_consultancy.php" method="get">
+        <div class="card card-info">
+          <div class="card-header">
+            <h3 class="card-title">Consultancy Details</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            <!--  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+              </button> -->
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Project *</label>
+                    <select class="select2" name="project" data-placeholder="Select Project"  style="width: 100%;" required>
+                    <option value="">Please select project</option>
+                    <?php
+                      include '../../connection/connection.php';
+                      $sql = "SELECT * FROM projects";
+                      $result = $conn->query($sql);
+                      if ($result->num_rows > 0) {
+                          while($row = $result->fetch_assoc()) {
+                              echo '<option value="'.$row["project_id"].'">'.$row["project_title"].'</option>';
+                          }
+                      } 
+                      $conn->close();
+                    ?>
+                    </select>
+                  </div>  
+                  <!-- /.form-group -->
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Cooperator *</label>
+                  <select class="select2" name="cooperator" data-placeholder="Select Cooperating Agency" style="width: 100%;">
+                  <option value="">Please select cooperator</option>
+                  <?php
+                      include '../../connection/connection.php';
+                      $sql = "SELECT * FROM psi_cooperators";
+                      $result = $conn->query($sql);
+                      if ($result->num_rows > 0) {
+                          while($row = $result->fetch_assoc()) {
+                              echo '<option value="'.$row["coop_id"].'">'.$row["coop_name"].'</option>';
+                          }
+                      } 
+                      $conn->close();
+                    ?>
+                  </select>
+                </div>  
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Service Provider *</label>
+                  <select class="select2" name="service_provider" data-placeholder="Select Service Provider" style="width: 100%;">
+                  <option value="">Please select service provider</option>
+                  <?php
+                      include '../../connection/connection.php';
+                      $sql = "SELECT * FROM psi_service_providers";
+                      $result = $conn->query($sql);
+                      if ($result->num_rows > 0) {
+                          while($row = $result->fetch_assoc()) {
+                              echo '<option value="'.$row["sp_id"].'">'.$row["sp_name"].'</option>';
+                          }
+                      } 
+                      $conn->close();
+                    ?>
+                  </select>
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Type *</label>
+                    <select class="form-control select2" name="consultancy_type" data-placeholder="Select Consultancy Type" style="width: 100%;" required>
+                    <option value="">Please select type of consultancy</option>
+                    <?php
+                      include '../../connection/connection.php';
+                      $sql = "SELECT * FROM psi_consultancy_types";
+                      $result = $conn->query($sql);
+                      if ($result->num_rows > 0) {
+                          while($row = $result->fetch_assoc()) {
+                              echo '<option value="'.$row["con_type_id"].'">'.$row["con_type_name"].'</option>';
+                          }
+                      } 
+                      $conn->close();
+                    ?>
+                    </select>
+                  </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Start Date *</label>
+                  <input class="form-control" name="consultancy_start" type="date" style="width: 100%;" required>
+                </div>  
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>End Date *</label>
+                  <input class="form-control" name="consultancy_end" type="date" style="width: 100%;" required>
+                </div>
+                <!-- /.form-group -->
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Implementor *</label>
+                  <select class="form-control select2" name="implementor" data-placeholder="Select Implementor" style="width: 100%;" required>
+                  <option value="">Please select implementor</option>
+                  <?php
+                      include '../../connection/connection.php';
+                      $sql = "SELECT * FROM psi_implementors";
+                      $result = $conn->query($sql);
+                      if ($result->num_rows > 0) {
+                          while($row = $result->fetch_assoc()) {
+                              echo '<option value="'.$row["implementor_id"].'">'.$row["implementor_name"].'</option>';
+                          }
+                      } 
+                      $conn->close();
+                    ?>
+                  </select></div>
+                <!-- /.form-group -->
+                </div>
+              <!-- /.col -->
+            </div>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>No. of Participants *</label>
+                  <input class="form-control" name="no_participants" type="number" placeholder="Enter No. of Participants" style="width: 100%;" required>
+                </div>  
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>No. of Firms *</label>
+                  <input class="form-control" name="no_firms" type="number" placeholder="Enter No. of Firms" style="width: 100%;" required>
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>No. of PO *</label>
+                  <input class="form-control" name="no_po" type="number" placeholder="Enter No. of PO" style="width: 100%;" required>
+                </div>
+                <!-- /.form-group -->
+              </div>
+
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Cost *</label>
+                  <input class="form-control" name="consultancy_cost" type="number"  placeholder="Enter No. of Consultancy Cost" style="width: 100%;" required>
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Remarks</label>
+                  <textarea class="form-control" name="remarks" type="text" placeholder="Enter Remarks" style="width: 100%;"></textarea>
+                </div>  
+                <!-- /.form-group -->
+              </div>
+            </div>
+        </div>
+        </div>
+        <!-- /.row -->
+        <div class="card card-success">
+          <div class="card-header">
+            <h3 class="card-title">Consultancy Location</h3>
+
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            <!--  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+              </button> -->
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+          <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Street Address</label>
+                  <input class="form-control" name="street" type="text" placeholder="Enter Street Address" style="width: 100%;">
+                </div>  
+                <!-- /.form-group -->
+              
+            </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Province</label>
+                  <select class="form-control select2" name="province" data-placeholder="Select Province" style="width: 100%;" required>
+                  <option value="">Select Province</option>
+                    <option value="51">Occidental Mindoro</option>
+                    <option value="52">Oriental Mindoro</option>
+                    <option value="40">Marinduque</option>
+                    <option value="59">Romblon</option>
+                    <option value="53">Palawan</option>
+                    <option value="315">City of Puerto Princesa</option>
+                    <option value="100">Region-wide</option>
+                  </select>
+                </div>  
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Municipality / City</label>
+                  <select class="form-control select2" name="city_mun" data-placeholder="Select City/Municipality" style="width: 100%;">
+                    <option value="">Select City/Municipality</option>
+                  </select>
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Barangay</label>
+                  <select class="form-control select2" name="barangay" data-placeholder="Select Barangay" style="width: 100%;">
+                  <option value="">Select Barangay</option>
+                  </select>
+                </div>
+                <!-- /.form-group -->
+                </div>
+              <!-- /.col -->
+            </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <div style="text-align: center">
+            <button type="submit" class="btn btn-primary btn-lg">Submit Consultancy</button>
+        </div><br /><br /><br />
+        </form>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+<?php
+  include 'template/footer.php';
+?>
+ 
