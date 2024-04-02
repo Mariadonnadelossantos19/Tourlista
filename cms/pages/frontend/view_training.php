@@ -3,8 +3,12 @@
   include 'template/header.php';
   include '../../connection/connection.php';
 
+  if($_SESSION['id']=="") header("Location:../../../");
 // SQL query
-$sql = "SELECT * FROM trainings";
+$sql = "SELECT * FROM trainings p
+left join psi_fora_types t on p.training_type = t.fr_type_id
+left join psi_sectors s on p.sectors = s.sector_id
+WHERE training_id='".$_GET['id']."'";
 
 // Execute query
 $result = $conn->query($sql);
@@ -15,10 +19,11 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $training_id = $row["training_id"];
         $training_title = $row["training_title"];
-        $training_type = $row["training_type"];
+        $training_type = $row["fr_type_name"];
+        $training_desc = $row["training_desc"];
         $requesting_party = $row["requesting_party"];
         $service_provider = $row["service_provider"];
-        $sectors = $row["sectors"];
+        $sectors = $row["sector_name"];
         $start_date = $row["start_date"];
         $end_date = $row["end_date"];
         $training_cost = $row["training_cost"];
@@ -38,6 +43,8 @@ if ($result->num_rows > 0) {
         $user_id = $row["user_id"];
         $date_encoded = $row["date_encoded"];
         $date_updated = $row["date_updated"];
+        
+        $totalcount = $female_participants + $male_participants + $pwd_participants + $sr_participants + $firm_participants + $po_participants;
 
         // Now you have individual variables for each column of the fetched row
         // You can process these variables as needed
@@ -45,7 +52,8 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
-
+$start_date = date_create($start_date);
+$end_date = date_create($end_date);
 // Close connection
 $conn->close();
 ?>
@@ -56,12 +64,12 @@ $conn->close();
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Project Details</h1>
+            <h1><?=$training_type?> Details</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Project Details</li>
+              <li class="breadcrumb-item active"><?=$training_type?> Details</li>
             </ol>
           </div>
         </div>
@@ -74,7 +82,7 @@ $conn->close();
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Projects Detail</h3>
+          <h3 class="card-title"><?=$training_type?> Detail</h3>
 
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -89,8 +97,8 @@ $conn->close();
                 <div class="col-12 col-sm-4">
                   <div class="info-box bg-yellow">
                     <div class="info-box-content">
-                      <span class="info-box-text text-center text-muted">Project Type</span>
-                      <span class="info-box-number text-center mb-0"><?= $project_type ?></span>
+                      <span class="info-box-text text-center text-muted">Type</span>
+                      <span class="info-box-number text-center mb-0"><?= $training_type ?></span>
                     </div>
                   </div>
                 </div>
@@ -98,7 +106,7 @@ $conn->close();
                   <div class="info-box bg-lime">
                     <div class="info-box-content">
                       <span class="info-box-text text-center text-muted">Project Cost</span>
-                      <span class="info-box-number text-center mb-0"><?= "PhP ".number_format($project_cost,2) ?></span>
+                      <span class="info-box-number text-center mb-0"><?= "PhP ".number_format($training_cost,2) ?></span>
                     </div>
                   </div>
                 </div>
@@ -106,7 +114,7 @@ $conn->close();
                   <div class="info-box bg-orange">
                     <div class="info-box-content">
                       <span class="info-box-text text-center text-muted">Project Duration</span>
-                      <span class="info-box-number text-center mb-0"><?= date_format($duration_from, "F d, Y")." to ".date_format($duration_to, "F d, Y") ?></span>
+                      <span class="info-box-number text-center mb-0"><?= date_format($start_date, "F d, Y")." to ".date_format($end_date, "F d, Y") ?></span>
                     </div>
                   </div>
                 </div>
@@ -118,7 +126,7 @@ $conn->close();
                       <div class="user-block">
                         <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
                         <span class="username">
-                          <a href="#">Allan G. Acosta</a>
+                          <a style="color:blue;">Allan G. Acosta</a>
                         </span>
                         <span class="description">March 21, 2024 at 7:42 AM</span>
                       </div>
@@ -167,39 +175,19 @@ $conn->close();
               </div>
             </div>
             <div class="col-12 col-md-12 col-lg-5 order-1 order-md-2">
-              <h5 class="text-primary"><b style="color: black;">Project Title: </b><br /><?= $project_title." " ?><small><span class="badge badge-danger"><?= $project_code ?></span></small.</h5>
+              <h5 class="text-primary"><b style="color: black;">Training Title: </b><br /><?= $training_title." " ?><small><span class="badge badge-danger"><?= $sectors ?></span></small.</h5>
               <hr />
-              <p class="text-muted"><b style="color: black;">Description: </b><br /><?= $project_desc ?></p>
+              <p class="text-muted"><b style="color: black;">Description: </b><br /><?= $training_desc ?></p>
               <br>
               <div class="text-muted">
-                <p class="text-sm">Status
                   <b class="d-block">
-                    <?php
-                        if($status == "New"){
-                            echo '<span class="badge badge-primary">New</span>';
-                        }
-                        if($status == "On-going"){
-                          echo '<span class="badge badge-warning">On-going</span>';
-                        }
-                        if($status == "Graduated"){
-                          echo '<span class="badge badge-success">Graduated</span>';
-                        }
-                        if($status == "Deferred"){
-                          echo '<span class="badge badge-secondary">Deferred</span>';
-                        }
-                        if($status == "Termindated"){
-                          echo '<span class="badge badge-danger">Terminated</span>';
-                        }
-                        if($status == "Withdrawn"){
-                          echo '<span class="badge badge-info">Withdrawn</span>';
-                        }
-                    ?>
+                  <div id="container"></div>
                   </b>
-                </p>
+               
                 <p class="text-sm">Project Implementor
                   <b class="d-block">
                   <?php
-                        if($implementor == "0"){
+                        if($implementor == "100"){
                             echo 'Regional Office';
                         }
                         if($implementor == "51"){
@@ -266,6 +254,8 @@ $conn->close();
   </div>
   <!-- /.content-wrapper -->
 <?php
+  include 'template/charts.php';
   include 'template/footer.php';
 ?>
+ 
  

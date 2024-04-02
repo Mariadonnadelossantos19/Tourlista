@@ -35,8 +35,9 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
+                  <th>Tags</th>
                   <th>Project Code</th>
-                  <th>Project Type</th>
+                  <th>Program Type</th>
                   <th>Year Approved</th>
                   <th>Project Title</th>
                   <th>Beneficiaries</th>
@@ -65,6 +66,7 @@
                       if ($result->num_rows > 0) {
                           while($row = $result->fetch_assoc()) {
                               echo "<tr>";
+                              echo "<td></td>";
                               echo "<td>".$row["project_code"]."</td>";
                               echo "<td>".$row["short"]."</td>";
                               echo "<td>".$row["year_approved"]."</td>";
@@ -100,6 +102,7 @@
                   </tbody>
                   <tfoot>
                   <tr>
+                    <th>Tags</th>
                     <th>Project Code</th>
                     <th>Project Type</th>
                     <th>Year Approved</th>

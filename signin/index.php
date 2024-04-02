@@ -81,5 +81,19 @@
 <script src="../cms/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../cms/dist/js/adminlte.min.js"></script>
+<?php
+  if(isset($_GET["attempts"])) {
+    $attemptCount = $_GET["attempts"];
+  } else {
+    $attemptCount = 0;
+  }
+
+?>
+
+<script>
+  if (<?php echo $attemptCount; ?> > 0) {
+    alert("Incorrect username or password. Attempts remaining: " + (5 - <?php echo $attemptCount; ?>));
+  }
+</script>
 </body>
 </html>

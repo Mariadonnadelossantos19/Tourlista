@@ -1,5 +1,5 @@
 <?php
-$page = "project_masterlist";
+$page = "consultancy_masterlist";
 include 'template/header.php';
 
 include '../../connection/connection.php';
@@ -8,9 +8,13 @@ include '../../connection/connection.php';
 
 if($_SESSION['id']=="") header("Location:../../../");
 
-$sql = "SELECT * FROM projects p
-left join psi_project_types t on p.project_type = t.prj_type_id
-WHERE project_id='".$_GET['id']."'";
+$sql = "SELECT * FROM consultancies c
+left join psi_consultancy_types ct on c.consultancy_type = ct.con_type_id
+left join projects p on c.project_id = p.project_id
+left join psi_cooperators coop on c.cooperator_id = coop.coop_id
+left join psi_service_providers sp on c.service_provider_id = sp.sp_id
+left join psi_implementors im on c.implementor_id = im.implementor_id
+WHERE consultancy_id='".$_GET['id']."'";
 
 // Execute the query
 $result = $conn->query($sql);
@@ -19,37 +23,34 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     // Fetch each row and store its data into separate variables
     while ($row = $result->fetch_assoc()) {
-        $project_id = $row['project_id'];
-        $project_code = $row['project_code'];
-        $project_type = $row['project_type'];
-        $year_approved = $row['year_approved'];
+        $consultancy_id = $row['consultancy_id'];
         $project_title = $row['project_title'];
-        $project_desc = $row['project_desc'];
-        $duration_from = $row['duration_from'];
-        $duration_to = $row['duration_to'];
-        $beneficiaries = $row['beneficiaries'];
-        $collaborating_agencies = $row['collaborating_agencies'];
-        $implementor = $row['implementor'];
-        $date_released = $row['date_released'];
-        $sector = $row['sector'];
-        $status = $row['status'];
+        $cooperator_id = $row['cooperator_id'];
+        $service_provider_id = $row['service_provider_id'];
+        $consultancy_type = $row['con_type_name'];
+        $consultancy_start_time = $row['consultancy_start'];
+        $consultancy_end_time = $row['consultancy_end'];
+        $implementor_name = $row['implementor_name'];
+        $no_participants = $row['no_participants'];
+        $no_firms = $row['no_firms'];
+        $no_po = $row['no_po'];
+        $consultancy_cost = $row['consultancy_cost'];
+        $remarks = $row['remarks'];
         $street = $row['street'];
         $province = $row['province'];
         $city_mun = $row['city_mun'];
-        $barangay = $row['barangay'];
-        $project_cost = $row['project_cost'];
-        $beneficiary_counterpart = $row['beneficiary_counterpart'];
-        $other_project_cost = $row['other_project_cost'];
-        $counterpart_desc = $row['counterpart_desc'];
-        $user_id = $row['user_id'];
-        $short = $row['short'];
+        $barangay =$row['barangay'];
+        $project_code = $row['project_code'];
+        $project_desc = $row['project_desc'];
+        $coop_name = $row['coop_name'];
+        $sp_name = $row['sp_name'];
+
     }
 } else {
     echo "0 results";
 }
-$duration_from = date_create($duration_from);
-$duration_to = date_create($duration_to);
-$date_released = date_create($date_released);
+$duration_from = date_create($consultancy_start_time);
+$duration_to = date_create($consultancy_end_time);
 // Close connection
 $conn->close();
 ?>
@@ -60,12 +61,12 @@ $conn->close();
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Project Details</h1>
+            <h1>Consultancy Details</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Project Details</li>
+              <li class="breadcrumb-item active">Consultancy Details</li>
             </ol>
           </div>
         </div>
@@ -78,7 +79,7 @@ $conn->close();
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Projects Detail</h3>
+          <h3 class="card-title">Consultancy Detail</h3>
 
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -94,23 +95,23 @@ $conn->close();
                   <div class="col-12 col-sm-4">
                     <div class="info-box bg-yellow">
                       <div class="info-box-content">
-                        <span class="info-box-text text-center text-muted">Program Type</span>
-                        <span class="info-box-number text-center mb-0"><?= $short ?></span>
+                        <span class="info-box-text text-center text-muted">Consultancy Type</span>
+                        <span class="info-box-number text-center mb-0"><?= $consultancy_type ?></span>
                       </div>
                     </div>
                   </div>
                   <div class="col-12 col-sm-4">
                     <div class="info-box bg-lime">
                       <div class="info-box-content">
-                        <span class="info-box-text text-center text-muted">Project Cost</span>
-                        <span class="info-box-number text-center mb-0"><?= "PhP ".number_format($project_cost,2) ?></span>
+                        <span class="info-box-text text-center text-muted">Consultancy Cost</span>
+                        <span class="info-box-number text-center mb-0"><?= "PhP ".number_format($consultancy_cost,2) ?></span>
                       </div>
                     </div>
                   </div>
                   <div class="col-12 col-sm-4">
                     <div class="info-box bg-orange">
                       <div class="info-box-content">
-                        <span class="info-box-text text-center text-muted">Project Duration</span>
+                        <span class="info-box-text text-center text-muted">Consultancy Duration</span>
                         <span class="info-box-number text-center mb-0"><?= date_format($duration_from, "F d, Y")." to ".date_format($duration_to, "F d, Y") ?></span>
                       </div>
                     </div>
@@ -170,60 +171,25 @@ $conn->close();
                     </div>
                 </div>
               </div>
+
+              
             </div>
+            
             <div class="col-12 col-md-12 col-lg-5 order-1 order-md-2">
-              <h5 class="text-primary"><b style="color: black;">Project Title: </b><br /><?= $project_title." " ?><small><span class="badge badge-danger"><?= $project_code ?></span></small.</h5>
+              <h5 class="text-primary"><b style="color: black;">Program Title: </b><br /><?= $project_title." " ?><small><span class="badge badge-danger"><?= $project_code ?></span></small.</h5>
               <hr />
               <p class="text-muted"><b style="color: black;">Description: </b><br /><?= $project_desc ?></p>
+              <div class="row">
+              <p class="text-muted"><b style="color: black;">Cooperator</b><br /><?=$coop_name?><br /><br /><b style="color: black;">Implementor</b><br /><?=$implementor_name?></p>
+              <span style="display:inline-block; border-left:1px solid #ccc; margin:0 10px; height:125px;"></span>
+              <p class="text-muted"><b style="color: black;">Service Provider</b><br /><?=$sp_name?></p>
+                </div>
               <br>
+              
               <div class="text-muted">
-                <p class="text-sm">Status
+                <p class="text-sm">
                   <b class="d-block">
-                    <?php
-                        if($status == "3"){
-                            echo '<span class="badge badge-primary">New</span>';
-                        }
-                        if($status == "1"){
-                          echo '<span class="badge badge-warning">On-going</span>';
-                          
-                        }
-                        if($status == "4"){
-                          echo '<span class="badge badge-success">Graduated</span>';
-                        }
-                        if($status == "5"){
-                          echo '<span class="badge badge-secondary">Deferred</span>';
-                        }
-                        if($status == "6"){
-                          echo '<span class="badge badge-danger">Terminated</span>';
-                        }
-                        if($status == "7"){
-                          echo '<span class="badge badge-info">Withdrawn</span>';
-                        }
-                    ?>
-                  </b>
-                </p>
-                <p class="text-sm">Project Implementor
-                  <b class="d-block">
-                  <?php
-                        if($implementor == "0"){
-                            echo 'Regional Office';
-                        }
-                        if($implementor == "51"){
-                          echo 'PSTO-Occidental Mindoro';
-                        }
-                        if($implementor == "52"){
-                          echo 'PSTO-Oriental Mindoro';
-                        }
-                        if($implementor == "40"){
-                          echo 'PSTO-Marinduque';
-                        }
-                        if($implementor == "59"){
-                          echo 'PSTO-Romblon';
-                        }
-                        if($implementor == "53"){
-                          echo 'PSTO-Palawan';
-                        }
-                    ?>
+                  <div id="con_participants_pie"></div>
                   </b>
                 </p>
               </div>
@@ -272,6 +238,7 @@ $conn->close();
   </div>
   <!-- /.content-wrapper -->
 <?php
+    include 'template/charts.php';
   include 'template/footer.php';
 ?>
  

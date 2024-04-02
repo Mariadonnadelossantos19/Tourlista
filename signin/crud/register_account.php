@@ -8,7 +8,7 @@
         header("Location:../register.php?status=0");
       }else{
       $sql = "INSERT INTO users (username, password, email, date_registered)
-      VALUES ('".strtoupper($_POST["username"])."','".password_hash(sha1($_POST["password"]), PASSWORD_BCRYPT)."','".base64_encode(strtolower($_POST["email"]))."','".date("Y-m-d | H:i:s")."')";
+      VALUES ('".strtoupper($_POST["username"])."','".password_hash(sha1($_POST["password"]), PASSWORD_BCRYPT, ['cost' => 12])."','".base64_encode(strtolower($_POST["email"]))."','".date("Y-m-d | H:i:s")."')";
       if (mysqli_query($conn, $sql)) {
           $to = $_POST['email'];
           $subject = "PMNS Application Registration Confirmation";

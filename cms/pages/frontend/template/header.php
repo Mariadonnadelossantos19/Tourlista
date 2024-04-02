@@ -51,6 +51,14 @@
   <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css"> 
+  <link rel="stylesheet" href="../../plugins/highcharts/highcharts.css">
+
+  <!-- Highcharts -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -239,7 +247,10 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="add_project.php" class="nav-link <?php if($page == 'add_project'){ echo "active"; } ?>">
+                <a href="add_project.php" class="nav-link <?php 
+                if($page == 'add_project'){ 
+                  echo "active"; 
+                  } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Project</p>
                 </a>

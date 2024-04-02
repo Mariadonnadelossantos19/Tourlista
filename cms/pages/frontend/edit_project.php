@@ -3,8 +3,10 @@ $page = "project_masterlist";
 include 'template/header.php';
 include '../../connection/connection.php';
 
+if($_SESSION['id']=="") header("Location:../../../");
+
 // SQL query to select all records from the projects table
-$sql = "SELECT * FROM projects";
+$sql = "SELECT * FROM projects WHERE project_id='".$_GET['id']."'";
 
 // Execute the query
 $result = $conn->query($sql);
@@ -306,13 +308,21 @@ $conn->close();
                   <label>Province</label>
                   <select class="form-control select2" name="province" data-placeholder="Select Province" data-placeholder="Select Province"  style="width: 100%;" required>
                   <option value="">Select Province</option>
-                  <option value="51">Occidental Mindoro</option>
-                    <option value="52">Oriental Mindoro</option>
-                    <option value="40">Marinduque</option>
-                    <option value="59">Romblon</option>
-                    <option value="53">Palawan</option>
-                    <option value="315">City of Puerto Princesa</option>
-                    <option value="100">Region-wide</option>
+
+                  <?php
+                      include '../../connection/connection.php';
+                      $sql1 = "SELECT * FROM psi_implementors";
+                      $result = $conn->query($sql1);
+                      if ($result->num_rows > 0) {
+                          while($row = $result->fetch_assoc()) {
+                              echo '<option value="'.$row["implementor_id"].'"'; 
+                              if($province==$row['implementor_id'])
+                              { echo 'selected'; } 
+                              echo '>'.$row["implementor_name"].'</option>';
+                          }
+                      } 
+                      $conn->close();
+                    ?>
                   </select>
                 </div>  
                 <!-- /.form-group -->
@@ -323,6 +333,24 @@ $conn->close();
                   <label>Municipality / City</label>
                   <select class="form-control select2" name="city_mun" data-placeholder="Select City/Municipality" style="width: 100%;">
                   <option value="">Select City/Municipality</option>
+                  
+                  <?php
+                      include '../../connection/connection.php';
+                      $sql1 = "SELECT * FROM citymun where region_c = 17";
+                      $result = $conn->query($sql1);
+                      if ($result->num_rows > 0) {
+                          while($row = $result->fetch_assoc()) {
+                              echo '<option value="'.$row["citymun_c"].'"'; 
+                              if($city_mun==$row['citymun_c'])
+                              { 
+                                echo 'selected'; 
+                              }
+                               echo '>'.$row["citymun_m"].'</option>';
+                          }
+                      } 
+                      $conn->close();
+                    ?>
+
                   </select>
                 </div>
                 <!-- /.form-group -->
@@ -332,6 +360,7 @@ $conn->close();
                   <label>Barangay</label>
                   <select class="form-control select2" name="barangay" data-placeholder="Select Barangay" style="width: 100%;">
                   <option value="">Select Barangay</option>
+                  
                   </select>
                 </div>
                 <!-- /.form-group -->

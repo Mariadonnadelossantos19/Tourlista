@@ -27,9 +27,11 @@
         $result2 = mysqli_query($conn, $sql2);
         if (mysqli_num_rows($result2) > 0){
           while($row2 = mysqli_fetch_assoc($result2)) {
-              if($row2["attempts"]>2){
+              if($row2["attempts"]>4){
                 $sql3 = "UPDATE users set status = '0' where user_id = '".$row['user_id']."'";
                 mysqli_query($conn, $sql3);
+                $message = "Your account has been locked due to multiple failed login attempts. Please contact the administrator to reactivate the account.";
+            header("Location:../index.php?status=5&message=" . urlencode($message));
               }
               else{
                 $attempts = $row2["attempts"];
@@ -42,6 +44,12 @@
   }
   else
   {
-    header("Location:../index.php?status=4&attempts=x");
+    ?><script>
+       alert("Your account has been locked due to multiple failed login attempts. Please contact the administrator to reactivate the account. Attempts remaining: 0")
+      </script>
+    <?php
+    $message = "Your account has been locked due to multiple failed login attempts. Please contact the administrator to reactivate the account.";
+    header("Location:../index.php?status=5&message=" . urlencode($message));
   }
+
 ?>

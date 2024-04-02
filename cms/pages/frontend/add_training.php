@@ -1,5 +1,5 @@
 <?php
-  $page = "training_masterlist";
+  $page = "add_training";
   include 'template/header.php';
   include '../../connection/connection.php';
 ?>
