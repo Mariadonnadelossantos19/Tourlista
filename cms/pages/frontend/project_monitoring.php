@@ -4,6 +4,28 @@
 
 ?>
 
+<?php
+
+include '../../connection/connection.php';
+$sql = "SELECT * FROM psi_percent p
+left join projects proj on p.project_id = proj.project_id
+left join psi_project_status projs on p.prj_status_id";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+  // Fetch each row and store its data into separate variables
+  while ($row = $result->fetch_assoc()) {
+      $percent = $row['percent'];
+
+
+  }
+} else {
+  echo "0 results";
+}
+$conn->close();
+?>
+
+
  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -42,7 +64,7 @@
     <table class="table table-striped projects">
         <thead>
             <tr>
-                <th style="width: 1%">
+                <th style="width: 10%">
                     Project Code
                 </th>
                 <th style="width: 20%">
@@ -64,42 +86,42 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    #
-                </td>
-                <td>
-                    <a>
-                        AdminLTE v3
-                    </a>
-                    <br/>
-                    <small>
-                        Created 01.01.2019
-                    </small>
-                </td>
-               <td>
-                </td>
-                <td class="project_progress">
-                    <div class="progress progress-sm">
-                        <div class="progress-bar bg-green" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                        </div>
-                    </div>
-                    <small>
-                        80% Complete
-                    </small>
-                </td>
-                <td class="project-state">
-                    <span class="badge badge-success"data-toggle="modal" data-target="#viewMyModal">Success</span>
-                </td>
-                <td class="project-actions text-right">
+          <?php
+              include '../../connection/connection.php';
+
+                      // SQL query to retrieve data
+                      $sql = "SELECT percent_id, project_code, project_title, project_desc, percent, prj_status_name FROM psi_percent p
+                      left join projects pro on p.project_id = pro.project_id
+                      left join psi_project_status projs on p.prj_status_id = projs.prj_status_id";
+
+                      // Execute the query
+                      $result = $conn->query($sql);
+
+                      if ($result->num_rows > 0) {
+                          while($row = $result->fetch_assoc()) {
+                              echo "<tr>";
+                              echo "<td>".$row["project_code"]."</td>";
+                              echo "<td>".$row["project_title"]."</td>";
+                              echo "<td>".$row["project_desc"]."</td>";
+                              echo "<td class='project_progress'>
+                              <div class='progress progress-sm'>
+                                  <div class='progress-bar bg-green' role='progressbar' aria-valuenow='".$row["percent"]."' aria-valuemin='0' aria-valuemax='100' style='width:".$row["percent"]."%'>
+                                  </div>
+                              </div>
+                              <small>
+                                  ".$row["percent"]."% Complete
+                              </small>
+                          </td>";
+                              echo "<td class='project-state'><span class='badge badge-success' data-toggle='modal' data-target='#viewMyModal'>".$row["prj_status_name"]."</span></td>";
+                              echo '<td class="project-actions text-right">
                     <a class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#viewMyModal">
                         <i class="fas fa-folder">
                         </i>
-                        View
+                        View 
                     </a>
                     <a class="btn btn-info btn-sm" href="#" data-toggle="modal" data-target="#editMyModal">
                         <i class="fas fa-pencil-alt">
-                        </i>
+                        </i>;
                         Edit
                     </a>
                     <a class="btn btn-danger btn-sm" href="#">
@@ -107,56 +129,9 @@
                         </i>
                         Delete
                     </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    #
-                </td>
-                <td>
-                    <a>
-                        AdminLTE v3
-                    </a>
-                    <br/>
-                    <small>
-                        Created 01.01.2019
-                    </small>
-                </td>
-                <td>
-                   
-                </td>
-                <td class="project_progress">
-                    <div class="progress progress-sm">
-                        <div class="progress-bar bg-green" role="progressbar" aria-valuenow="47" aria-valuemin="0" aria-valuemax="100" style="width: 47%">
-                        </div>
-                    </div>
-                    <small>
-                        47% Complete
-                    </small>
-                </td>
-                <td class="project-state">
-                    <span class="badge badge-success">Success</span>
-                </td>
-                <td class="project-actions text-right">
-                    <a class="btn btn-primary btn-sm" href="#">
-                        <i class="fas fa-folder">
-                        </i>
-                        View
-                    </a>
-                    <a class="btn btn-info btn-sm" href="#">
-                        <i class="fas fa-pencil-alt">
-                        </i>
-                        Edit
-                    </a>
-                    <a class="btn btn-danger btn-sm" href="#">
-                        <i class="fas fa-trash">
-                        </i>
-                        Delete
-                    </a>
-                </td>
-            </tr>
-            
-            </tr>
+                </td>';
+                              }}
+                              ?>
         </tbody>
     </table>
   </div>
