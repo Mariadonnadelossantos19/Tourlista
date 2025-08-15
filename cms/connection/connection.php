@@ -2,7 +2,7 @@
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "pmns_db";
+    $dbname = "tourlista";
 
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $dbname);

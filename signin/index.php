@@ -1,9 +1,12 @@
+<?php
+error_reporting(E_ERROR | E_PARSE);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PMNS - Project Management and Notification System</title>
+  <title>tourLISTA - Tourism Live-Inventory and Statistics of Tourist Arrivals</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -13,28 +16,121 @@
   <link rel="stylesheet" href="../cms/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../cms/dist/css/adminlte.min.css">
+
+  <link rel="icon" href="../assets/images/tl.png">
+
+  <style>
+      #body {
+    background: url('../assets/images/bg.png') no-repeat center center fixed; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+  </style>
 </head>
-<body class="hold-transition login-page">
+<body id="body" class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="../cms/index2.html"><b>PMNS</b></a>
+  <img src="../assets/images/tourlista.png" alt="alternative" width="90%">
   </div>
   <!-- /.login-logo -->
+  <?php
+
+      if($_GET["status"]=='1'){
+
+      echo '
+
+      <div class="alert alert-success" role="alert">
+      <b>Success!</b> A request to recover and reset your account password was sent to your registered email address.
+      </div>
+      ';
+
+      }
+      if($_GET["status"]=='2'){
+
+      echo '
+      <div class="alert alert-success" role="alert">
+      <b>Success!</b> Your password has been reset to the default value. Your new password is: 12345678. Please log in and change it immediately.
+      </div>
+      ';
+      }
+
+      if($_GET["status"]=='6'){
+
+        echo '
+        <div class="alert alert-danger" role="alert">
+        <b>Warning!</b> Invalid token. Please check your link or request a new one..
+        </div>
+        ';
+        }
+
+      if($_GET["status"]=='0'){
+
+      echo '
+
+      <div class="alert alert-danger" role="alert">
+      <b>Warning!</b> Your request to reset your account was not granted due to invalid / unregistered email address.
+      </div>
+      ';
+      }
+
+      if($_GET["status"]=='4' && $_GET["attempts"]=='x'){
+
+        echo '
+
+        <div class="alert alert-danger" role="alert">
+        <b>Warning!</b> You have entered an incorrect username / password.
+        </div>
+        ';
+      }
+
+      if($_GET["status"]=='4' && $_GET["attempts"]>0 && $_GET["attempts"]<3){
+
+        echo '
+
+        <div class="alert alert-danger" role="alert">
+        <b>Warning!</b> You have entered an incorrect password, 3 incorrect attempts will locked your account ('.$_GET['attempts'].' out of 3).
+        </div>
+        ';
+      }
+
+      if($_GET["status"]=='4' && $_GET["attempts"]=='0'){
+
+        echo '
+
+        <div class="alert alert-danger" role="alert">
+        <b>Warning!</b> Your Account was Locked!.
+        </div>
+        ';
+      }
+      if($_GET["status"]=='5'){
+
+        echo '
+  
+        <div class="alert alert-success" role="alert">
+        <b>Success!</b> Your email address has been verified.
+        </div>
+        ';
+  
+        }
+
+  ?>
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 
       <form action="crud/check.php" method="post">
         <div class="input-group mb-3">
-          <input type="username" class="form-control" name="username" placeholder="Username" required>
+          <input type="text" name="username" class="form-control" pattern="[A-Za-z0-9_]{5,40}" placeholder="Username"  required>
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-user"></span>
+              <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" name="password" placeholder="Password" required>
+          <input type="password" name="security" class="form-control" placeholder="Password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -64,10 +160,10 @@
       <!-- /.social-auth-links -->
 
       <p class="mb-1">
-        <a href="#">I forgot my password</a>
+        <a href="recover_account.php">I forgot my password</a>
       </p>
       <p class="mb-0">
-        <a href="register.php" class="text-center">Register a new membership</a>
+        <a href="register_account.php" class="text-center">Register an account</a>
       </p>
     </div>
     <!-- /.login-card-body -->
@@ -81,19 +177,5 @@
 <script src="../cms/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../cms/dist/js/adminlte.min.js"></script>
-<?php
-  if(isset($_GET["attempts"])) {
-    $attemptCount = $_GET["attempts"];
-  } else {
-    $attemptCount = 0;
-  }
-
-?>
-
-<script>
-  if (<?php echo $attemptCount; ?> > 0) {
-    alert("Incorrect username or password. Attempts remaining: " + (5 - <?php echo $attemptCount; ?>));
-  }
-</script>
 </body>
 </html>
