@@ -9,10 +9,30 @@
 
           include '../../connection/connection.php';
           include '../../connection/logs.php';
-          recordLog("Approved accommodation establishment with ID=".$_GET['id']);
-          $id=$_GET['id'];
+          
+          // Validate that ID parameter exists and is not empty
+          if (!isset($_GET['id']) || empty($_GET['id'])) {
+              echo "Error: Invalid or missing establishment ID. Please go back and try again.";
+              echo "<br><a href='../core/manage_accommodation.php'>Back to Manage Accommodation</a>";
+              exit();
+          }
+          
+          $id = mysqli_real_escape_string($conn, $_GET['id']);
+          recordLog("Approved accommodation establishment with ID=".$id);
+          
           $email = "";
           $username = "";
+          
+          // First check if the establishment exists
+          $checkSql = "SELECT ae_id FROM accommodation_establishment WHERE ae_id = '".$id."'";
+          $checkResult = mysqli_query($conn, $checkSql);
+          
+          if (mysqli_num_rows($checkResult) == 0) {
+              echo "Error: Establishment with ID '".$id."' not found. Please go back and try again.";
+              echo "<br><a href='../core/manage_accommodation.php'>Back to Manage Accommodation</a>";
+              exit();
+          }
+          
           $sql = "UPDATE accommodation_establishment set approve_status='1' WHERE ae_id='".$id."'";
           if (mysqli_query($conn, $sql)) {
             //QUERY FOR USER DETAILS

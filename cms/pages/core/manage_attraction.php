@@ -24,7 +24,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
+      <div class="container-fluid"> 
         <div class="row">
           <div class="col-12">
             <!-- /.card -->
@@ -116,9 +116,7 @@
                         if($row['request_edit']==2){
                           echo '<span class="badge badge-success">granted</span>';
                         }
-                      }
 
-                        
                         echo '</td><td>';
 
                         if($row['approve_status']==0){
@@ -136,10 +134,11 @@
                           $ta_denied++;
                           $ta_total++;
                         }
+                      }
 
                         echo  '</td>
                               <td>
-                              <a title="show details"><button class="btn btn-info btn-sm" onclick="getDetails('.$row["ta_id"].')"><i class="fa fa-book"></i></button></a></a>';
+                              <a title="show details"><button class="btn btn-info btn-sm" onclick="getDetails(\''.$row["ta_id"].'\')"><i class="fa fa-book"></i></button></a></a>';
                               if($row['approve_status']==0){
                                 echo '
                                       <a href="../crud/approve_ta.php?id='.$row["ta_id"].'" title="approved"><button class="btn btn-success btn-sm"><i class="fa fa-thumbs-up"></i></button></a>

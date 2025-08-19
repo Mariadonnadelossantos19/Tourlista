@@ -421,17 +421,41 @@
 
     echo "<tr style='background-color: white;'><td colspan='14'></td></tr>";
     echo "<tr style='background-color: #8CFC0C;'><td><b>TOTAL OVERSEAS FILIPINO</b></td>";
+    $totalOverseas = 0;
     for($d=1; $d<13; $d++){
-        echo "<td>0</td>";
+        $sqlOverseas = "select sum(overseas_filipino) as of from ae_daily_task a left join accommodation_establishment x on a.ae_id = x.ae_id
+        left join ts_users u on x.user_id = u.user_id where approve_status = '1' and province_c = '".$_GET['province']."' and citymun_c = '".$_GET['citymun']."' and month = '".$d."' and year = '".$year."'";
+
+        $resultOverseas = mysqli_query($conn, $sqlOverseas);
+        if (mysqli_num_rows($resultOverseas) > 0) {
+          while($rowOverseas = mysqli_fetch_assoc($resultOverseas)) {
+              echo "<td>".number_format($rowOverseas['of']+0)."</td>";
+              $totalOverseas += ($rowOverseas['of']+0);
+          }
+        } else {
+          echo "<td>0</td>";
+        }
     }
-    echo "<td style='color:red;'><b>0</td>";
+    echo "<td style='color:red;'><b>".number_format($totalOverseas)."</td>";
     echo "</tr>";
     echo "<tr style='background-color: white;'><td colspan='14'></td></tr>";
     echo "<tr style='background-color: yellow;'><td><b>GRAND TOTAL GUEST ARRIVALS</b></td>";
     $gt = 0;
     for($d=1; $d<13; $d++){
-        echo "<td>".number_format($filR[$d]+$nfilR[$d])."</td>";
-        $gt +=$filR[$d]+$nfilR[$d];
+        // Get overseas Filipino data for this month
+        $sqlOverseas = "select sum(overseas_filipino) as of from ae_daily_task a left join accommodation_establishment x on a.ae_id = x.ae_id
+        left join ts_users u on x.user_id = u.user_id where approve_status = '1' and province_c = '".$_GET['province']."' and citymun_c = '".$_GET['citymun']."' and month = '".$d."' and year = '".$year."'";
+
+        $overseasCount = 0;
+        $resultOverseas = mysqli_query($conn, $sqlOverseas);
+        if (mysqli_num_rows($resultOverseas) > 0) {
+          while($rowOverseas = mysqli_fetch_assoc($resultOverseas)) {
+              $overseasCount = ($rowOverseas['of']+0);
+          }
+        }
+        
+        echo "<td>".number_format($filR[$d]+$nfilR[$d]+$overseasCount)."</td>";
+        $gt +=$filR[$d]+$nfilR[$d]+$overseasCount;
     }
     echo "<td style='color:red;'><b>".number_format($gt)."</td>";
     echo "</tr>";
@@ -451,9 +475,19 @@
     echo "</tr>";
     echo "<tr style='background-color: #8CFC0C;'><td><b>TOTAL OVERSEAS FILIPINO</b></td>";
     for($d=1; $d<13; $d++){
-        echo "<td>0</td>";
+        $sqlOverseas = "select sum(overseas_filipino) as of from ae_daily_task a left join accommodation_establishment x on a.ae_id = x.ae_id
+        left join ts_users u on x.user_id = u.user_id where approve_status = '1' and province_c = '".$_GET['province']."' and citymun_c = '".$_GET['citymun']."' and month = '".$d."' and year = '".$year."'";
+
+        $resultOverseas = mysqli_query($conn, $sqlOverseas);
+        if (mysqli_num_rows($resultOverseas) > 0) {
+          while($rowOverseas = mysqli_fetch_assoc($resultOverseas)) {
+              echo "<td>".number_format($rowOverseas['of']+0)."</td>";
+          }
+        } else {
+          echo "<td>0</td>";
+        }
     }
-    echo "<td style='color:red;'><b>0</td>";
+    echo "<td style='color:red;'><b>".number_format($totalOverseas)."</td>";
     echo "</tr>";
     echo "<tr style='background-color: #8CFC0C;'><td><b>TOTAL GUEST WITH UNIDENTIFIED RESIDENCE</b></td>";
     for($d=1; $d<13; $d++){
