@@ -21,12 +21,30 @@
     <title>tourLISTA - Tourism Live-Inventory and Statistics of Tourist Arrivals</title>
 
     <!-- Styles -->
+    <link rel="canonical" href="https://tourlista.dostmimaropa.ph/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="theme-color" content="#0aa9a4">
+    <meta name="robots" content="index,follow">
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,600,700,700i&amp;subset=latin-ext" rel="stylesheet">
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/fontawesome-all.css" rel="stylesheet">
     <link href="assets/css/swiper.css" rel="stylesheet">
 	<link href="assets/css/magnific-popup.css" rel="stylesheet">
 	<link href="assets/css/styles.css" rel="stylesheet">
+	<link rel="preload" as="image" href="assets/images/header-teamwork.svg">
+
+	<style>
+		/* Visual polish without altering layout/content */
+		.navbar-custom{transition:background-color .3s ease,box-shadow .3s ease}
+		.navbar-custom.scrolled{background:#0aa9a4;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+		.cards-1 .card,.cards-2 .card{transition:transform .2s ease,box-shadow .2s ease}
+		.cards-1 .card:hover,.cards-2 .card:hover{transform:translateY(-6px);box-shadow:0 20px 35px rgba(0,0,0,.12)}
+		.back-to-top{position:fixed;right:16px;bottom:16px;width:48px;height:48px;border-radius:50%;background:#0aa9a4;color:#fff;display:none;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(10,169,164,.4);z-index:999}
+		.back-to-top.show{display:flex}
+		.btn-solid-lg{transition:transform .15s ease}
+		.btn-solid-lg:hover{transform:translateY(-2px)}
+	</style>
 
 	<!-- Favicon  -->
     <link rel="icon" href="assets/images/tl.png">
@@ -61,7 +79,8 @@
         <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Evolo</a> -->
 
         <!-- Image Logo -->
-        <img src="assets/images/tourlista.png" height="75" width="190" alt="alternative"></h2>
+        <h2 class="m-0">
+        <img src="assets/images/tourlista.png" height="75" width="190" alt="tourLISTA logo" loading="lazy" decoding="async"></h2>
 
         <!-- Mobile Menu Toggle Button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -124,7 +143,7 @@
                     </div> <!-- end of col -->
                     <div class="col-lg-6">
                         <div class="image-container">
-                            <img class="img-fluid" src="assets/images/header-teamwork.svg" alt="alternative">
+                            <img class="img-fluid" src="assets/images/header-teamwork.svg" alt="alternative" loading="lazy" decoding="async">
                         </div> <!-- end of image-container -->
                     </div> <!-- end of col -->
                 </div> <!-- end of row -->
@@ -146,7 +165,7 @@
 
                     <!-- Card -->
                     <div class="card">
-                        <img class="card-image" src="assets/images/services-icon-1.svg" alt="alternative">
+                        <img class="card-image" src="assets/images/services-icon-1.svg" alt="alternative" loading="lazy" decoding="async">
                         <div class="card-body">
                             <h4 class="card-title">Analyzing Population</h4>
                             <p>Designed to evaluate the influx of visitors to AEs and TAs, the system provides comprehensive analysis of the tourist population.</p>
@@ -156,7 +175,7 @@
 
                     <!-- Card -->
                     <div class="card">
-                        <img class="card-image" src="assets/images/services-icon-2.svg" alt="alternative">
+                        <img class="card-image" src="assets/images/services-icon-2.svg" alt="alternative" loading="lazy" decoding="async">
                         <div class="card-body">
                             <h4 class="card-title">Assessing Operation</h4>
                             <p>TourLISTA streamlines reporting transactions by evaluating the daily encoding operations of accommodation establishments and tourist attractions.</p>
@@ -166,7 +185,7 @@
 
                     <!-- Card -->
                     <div class="card">
-                        <img class="card-image" src="assets/images/services-icon-3.svg" alt="alternative">
+                        <img class="card-image" src="assets/images/services-icon-3.svg" alt="alternative" loading="lazy" decoding="async">
                         <div class="card-body">
                             <h4 class="card-title">Tracking Tourism</h4>
                             <p>By tracking the flow of tourism, government managers can identify priority areas for tourism development plans and projects.</p>
@@ -194,7 +213,7 @@
                 </div> <!-- end of col -->
                 <div class="col-lg-6">
                     <div class="image-container">
-                        <img class="img-fluid" src="assets/images/details-1-office-worker.svg" alt="alternative">
+                        <img class="img-fluid" src="assets/images/details-1-office-worker.svg" alt="alternative" loading="lazy" decoding="async">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
@@ -210,7 +229,7 @@
                 <button title="Close (Esc)" type="button" class="mfp-close x-button">×</button>
                 <div class="col-lg-8">
                     <div class="image-container">
-                        <img src="assets/images/details-lightbox-2.svg" alt="alternative">
+                        <img src="assets/images/details-lightbox-2.svg" alt="alternative" loading="lazy" decoding="async">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-4">
@@ -249,7 +268,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="image-container">
-                        <img class="img-fluid" src="assets/images/details-2-office-team-work.svg" alt="alternative">
+                        <img class="img-fluid" src="assets/images/details-2-office-team-work.svg" alt="alternative" loading="lazy" decoding="async">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-6">
@@ -272,7 +291,7 @@
                 <button title="Close (Esc)" type="button" class="mfp-close x-button">×</button>
                 <div class="col-lg-8">
                     <div class="image-container">
-                        <img src="assets/images/details-lightbox-2.svg" alt="alternative">
+                        <img src="assets/images/details-lightbox-2.svg" alt="alternative" loading="lazy" decoding="async">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-4">
@@ -324,10 +343,10 @@
                             <div class="card-subtitle">for accredited accommodation establishment</div>
                             <hr class="cell-divide-hr">
                             <div class="price">
-                                <img src="assets/images/search.png" height="250" width="250" alt="alternative">
+                                <img src="assets/images/search.png" height="250" width="250" alt="alternative" loading="lazy" decoding="async">
                             </div>
                             <div class="button-wrapper">
-                                <a class="btn-solid-reg page-scroll" target="_blank" href="#">LAUNCH APP</a>
+                                <a class="btn-solid-reg page-scroll" target="_blank" rel="noopener noreferrer" href="#">LAUNCH APP</a>
                             </div>
                         </div>
                     </div> <!-- end of card -->
@@ -340,10 +359,10 @@
                             <div class="card-subtitle">the map for nearest attractions and establishments</div>
                             <hr class="cell-divide-hr">
                             <div class="price">
-                                <img src="assets/images/map.png" height="250" width="250" alt="alternative">
+                                <img src="assets/images/map.png" height="250" width="250" alt="alternative" loading="lazy" decoding="async">
                             </div>
                             <div class="button-wrapper">
-                                <a class="btn-solid-reg page-scroll" target="_blank" href="#">LAUNCH APP</a>
+                                <a class="btn-solid-reg page-scroll" target="_blank" rel="noopener noreferrer" href="#">LAUNCH APP</a>
                             </div>
                         </div>
                     </div> <!-- end of card -->
@@ -356,10 +375,10 @@
                             <div class="card-subtitle">tourism data in your place and learn new opportunities</div>
                             <hr class="cell-divide-hr">
                             <div class="price">
-                                <img src="assets/images/analyze.png" height="250" width="250" alt="alternative">
+                                <img src="assets/images/analyze.png" height="250" width="250" alt="alternative" loading="lazy" decoding="async">
                             </div>
                             <div class="button-wrapper">
-                                <a class="btn-solid-reg page-scroll" target="_blank" href="#">LAUNCH APP</a>
+                                <a class="btn-solid-reg page-scroll" target="_blank" rel="noopener noreferrer" href="#">LAUNCH APP</a>
                             </div>
                         </div>
                     </div> <!-- end of card -->
@@ -467,7 +486,7 @@
                     <div class="image-container">
                         <div class="video-wrapper">
                             <a class="popup-youtube" href="https://www.youtube.com/watch?v=W65oeuXAHMY" data-effect="fadeIn">
-                                <img class="img-fluid" src="assets/images/video-frame.svg" alt="alternative">
+                                <img class="img-fluid" src="assets/images/video-frame.svg" alt="alternative" loading="lazy" decoding="async">
                                 <span class="video-play-button">
                                     <span></span>
                                 </span>
@@ -490,7 +509,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="image-container">
-                        <img class="img-fluid" src="assets/images/testimonials-2-men-talking.svg" alt="alternative">
+                        <img class="img-fluid" src="assets/images/testimonials-2-men-talking.svg" alt="alternative" loading="lazy" decoding="async">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-6">
@@ -504,7 +523,7 @@
                                 <!-- Slide -->
                                 <div class="swiper-slide">
                                     <div class="card">
-                                        <img class="card-image" src="assets/images/testimonial-1.svg" alt="alternative">
+                                        <img class="card-image" src="assets/images/testimonial-1.svg" alt="alternative" loading="lazy" decoding="async">
                                         <div class="card-body">
                                             <p class="testimonial-text">Accomplishment Reports from the Tourist Attractions and Accommodition Establishments</p>
                                             <p class="testimonial-author">Accomplishment Reports</p>
@@ -516,7 +535,7 @@
                                 <!-- Slide -->
                                 <div class="swiper-slide">
                                     <div class="card">
-                                        <img class="card-image" src="assets/images/testimonial-2.svg" alt="alternative">
+                                        <img class="card-image" src="assets/images/testimonial-2.svg" alt="alternative" loading="lazy" decoding="async">
                                         <div class="card-body">
                                             <p class="testimonial-text">Circulars related to the implementation of the TourLISTA and submission of accomplishment reports</p>
                                             <p class="testimonial-author">Memorandum Circular</p>
@@ -528,7 +547,7 @@
                                 <!-- Slide -->
                                 <div class="swiper-slide">
                                     <div class="card">
-                                        <img class="card-image" src="assets/images/testimonial-3.svg" alt="alternative">
+                                        <img class="card-image" src="assets/images/testimonial-3.svg" alt="alternative" loading="lazy" decoding="async">
                                         <div class="card-body">
                                             <p class="testimonial-text">Policies, Guidelines and related regulation relative to the tourism management and implementation</p>
                                             <p class="testimonial-author">Guidelines</p>
@@ -570,7 +589,7 @@
                     <!-- Team Member -->
                     <div class="team-member">
                         <div class="image-wrapper">
-                            <img class="img-fluid" src="assets/images/dost1.png" alt="alternative">
+                            <img class="img-fluid" src="assets/images/dost1.png" alt="alternative" loading="lazy" decoding="async">
                         </div> <!-- end of image-wrapper -->
                         <p class="p-large"><strong>Department of Science and Technology</strong></p>
                         <span class="social-icons">
@@ -594,7 +613,7 @@
                     <!-- Team Member -->
                     <div class="team-member">
                         <div class="image-wrapper">
-                            <img class="img-fluid" src="assets/images/dot1.png" alt="alternative">
+                            <img class="img-fluid" src="assets/images/dot1.png" alt="alternative" loading="lazy" decoding="async">
                         </div> <!-- end of image wrapper -->
                         <p class="p-large"><strong>Department of <br />Tourism</strong></p>
                         <span class="social-icons">
@@ -638,7 +657,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="map-responsive">
-                      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6320865.830724669!2d117.17483731619066!3d12.879721336233456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x331bd0dd7b9f2eeb%3A0x2389fc10c033d2c0!2sPhilippines!5e0!3m2!1sen!2sph!4v1685965012345!5m2!1sen!2sph" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+                      <iframe data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6320865.830724669!2d117.17483731619066!3d12.879721336233456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x331bd0dd7b9f2eeb%3A0x2389fc10c033d2c0!2sPhilippines!5e0!3m2!1sen!2sph!4v1685965012345!5m2!1sen!2sph" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy" title="Philippines map"></iframe>
                     </div>
                 </div> <!-- end of col -->
                 <div class="col-lg-6">
@@ -709,7 +728,7 @@
                     <div class="footer-col last">
                         <h4>Social Media</h4>
                         <span class="fa-stack">
-                            <a href=#">
+                            <a href="#">
                                 <i class="fas fa-circle fa-stack-2x"></i>
                                 <i class="fab fa-facebook-f fa-stack-1x"></i>
                             </a>
@@ -750,5 +769,44 @@
     <script src="assets/js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
     <script src="assets/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
     <script src="assets/js/scripts.js"></script> <!-- Custom scripts -->
+    <script>
+      // Navbar background on scroll
+      (function(){
+        var nav=document.querySelector('.navbar-custom');
+        function onScroll(){ if(window.pageYOffset>10){ nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); } }
+        window.addEventListener('scroll', onScroll, {passive:true});
+        onScroll();
+      })();
+
+      // Lazy-load Google Map when visible
+      (function(){
+        var iframe=document.querySelector('.map-responsive iframe');
+        if(!iframe) return;
+        if(!('IntersectionObserver' in window)){
+          if(iframe.dataset.src && !iframe.src){ iframe.src=iframe.dataset.src; }
+          return;
+        }
+        var io=new IntersectionObserver(function(entries){
+          entries.forEach(function(e){
+            if(e.isIntersecting){
+              if(iframe.dataset.src && !iframe.src){ iframe.src=iframe.dataset.src; }
+              io.disconnect();
+            }
+          });
+        });
+        io.observe(iframe);
+      })();
+
+      // Back-to-top button
+      (function(){
+        var btn=document.getElementById('toTop');
+        if(!btn) return;
+        function toggle(){ if(window.pageYOffset>400){ btn.classList.add('show'); } else { btn.classList.remove('show'); } }
+        window.addEventListener('scroll', toggle, {passive:true});
+        btn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+        toggle();
+      })();
+    </script>
+    <button id="toTop" class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
 </body>
 </html>
