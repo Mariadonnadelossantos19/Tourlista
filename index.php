@@ -38,6 +38,11 @@
 		/* Visual polish without altering layout/content */
 		.navbar-custom{transition:background-color .3s ease,box-shadow .3s ease}
 		.navbar-custom.scrolled{background:#0aa9a4;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+		/* Balance navbar across the page */
+		.navbar-custom .navbar-collapse{justify-content:center}
+		.navbar-custom .navbar-nav{display:flex;align-items:center;gap:28px}
+		.navbar-custom .nav-link{font-size:1.05rem;padding:.5rem .75rem;font-weight:600;letter-spacing:.2px}
+		.navbar-custom .social-icons{margin-left:32px;display:flex;gap:10px}
 		.cards-1 .card,.cards-2 .card{transition:transform .2s ease,box-shadow .2s ease}
 		.cards-1 .card:hover,.cards-2 .card:hover{transform:translateY(-6px);box-shadow:0 20px 35px rgba(0,0,0,.12)}
 		.back-to-top{position:fixed;right:16px;bottom:16px;width:48px;height:48px;border-radius:50%;background:#0aa9a4;color:#fff;display:none;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(10,169,164,.4);z-index:999}
