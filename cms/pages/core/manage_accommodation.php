@@ -87,8 +87,9 @@
                         t.region_c = '".$region."' order by ae_id desc";
                   }
 
-                  $result = mysqli_query($conn, $sql);
-                  while($row = mysqli_fetch_assoc($result)) {
+                  if (!empty($sql)) {
+    $result = mysqli_query($conn, $sql);
+    while($row = mysqli_fetch_assoc($result)) {
                   echo '
                   <tr>
                         <td>'.strtoupper($row['ae_name']).'</td>
@@ -107,7 +108,7 @@
                             if($row['request_edit']==2){
                               echo '<span class="badge badge-success">granted</span>';
                             }
-
+                          }
                         
                         echo '</td><td>';
 

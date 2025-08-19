@@ -90,7 +90,7 @@
                     <div class="col-3"> 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Establishment Accredited?</label>
-                        <select class="form-control" name="is_accredited" required>
+                        <select class="form-control" name="is_accredited" id="is_accredited" required onchange="toggleAccreditationFields()">
                             <option value="yes">YES</option>
                             <option value="no">NO</option>
                         </select>
@@ -98,28 +98,28 @@
                     <!-- /.form-group -->
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-3" id="accreditation_number_div">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Accreditation Number</label>
-                        <input type="text" name="accreditation_number" class="form-control" placeholder="Enter accreditation number">
+                        <input type="text" name="accreditation_number" id="accreditation_number" class="form-control" placeholder="Enter accreditation number">
                     </div>
                     <!-- /.form-group -->
                     </div>
 
                     
-                    <div class="col-3">
+                    <div class="col-3" id="valid_from_div">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Validity From</label>
-                        <input type="date" name="valid_from" class="form-control" placeholder="Accreditation Validity Period From">
+                        <input type="date" name="valid_from" id="valid_from" class="form-control" placeholder="Accreditation Validity Period From">
                     </div>
                     <!-- /.form-group -->
                     </div>
 
                     
-                    <div class="col-3">
+                    <div class="col-3" id="valid_to_div">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Validity To</label>
-                        <input type="date" name="valid_to" class="form-control" placeholder="Accreditation Validity Period To">
+                        <input type="date" name="valid_to" id="valid_to" class="form-control" placeholder="Accreditation Validity Period To">
                     </div>
                     <!-- /.form-group -->
                     </div>
@@ -443,6 +443,58 @@ document.getElementById('saveDetailsBtn').addEventListener('click', function () 
 function getLocation(location){
   document.getElementById('location').value=location;
 }
+
+function toggleAccreditationFields() {
+  var isAccredited = document.getElementById('is_accredited').value;
+  var accreditationNumberDiv = document.getElementById('accreditation_number_div');
+  var validFromDiv = document.getElementById('valid_from_div');
+  var validToDiv = document.getElementById('valid_to_div');
+  var accreditationNumber = document.getElementById('accreditation_number');
+  var validFrom = document.getElementById('valid_from');
+  var validTo = document.getElementById('valid_to');
+  
+  if (isAccredited === 'yes') {
+    // Show accreditation fields
+    accreditationNumberDiv.style.display = 'block';
+    validFromDiv.style.display = 'block';
+    validToDiv.style.display = 'block';
+    
+    // Enable fields
+    accreditationNumber.disabled = false;
+    validFrom.disabled = false;
+    validTo.disabled = false;
+    
+    // Add required attribute
+    accreditationNumber.required = true;
+    validFrom.required = true;
+    validTo.required = true;
+  } else {
+    // Hide accreditation fields
+    accreditationNumberDiv.style.display = 'none';
+    validFromDiv.style.display = 'none';
+    validToDiv.style.display = 'none';
+    
+    // Disable fields
+    accreditationNumber.disabled = true;
+    validFrom.disabled = true;
+    validTo.disabled = true;
+    
+    // Remove required attribute and clear values
+    accreditationNumber.required = false;
+    validFrom.required = false;
+    validTo.required = false;
+    
+    // Clear the values
+    accreditationNumber.value = '';
+    validFrom.value = '';
+    validTo.value = '';
+  }
+}
+
+// Initialize the form on page load
+document.addEventListener('DOMContentLoaded', function() {
+  toggleAccreditationFields();
+});
 </script>
 <?php include '../template/footer.php'; ?>
 
