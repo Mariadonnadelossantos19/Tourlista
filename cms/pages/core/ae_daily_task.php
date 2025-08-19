@@ -81,7 +81,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-hotel"></i></span>
                             </div>
-                            <input type="number" name="no_rooms_occupied" id="no_rooms_occupied" class="form-control" placeholder="Enter no. of rooms occupied" min="0" max="<?php echo $no_rooms; ?>" title="Number of rooms occupied by visitors" required>
+                            <input type="number" name="no_rooms_occupied" id="no_rooms_occupied" class="form-control" placeholder="Enter no. of rooms occupied" min="0" max="<?php echo $no_rooms; ?>" title="Number of rooms occupied by visitors" onchange="checkRoomsOccupied()" onkeyup="checkRoomsOccupied()" required>
                         </div>
                     </div>
                 </div>
@@ -1000,6 +1000,45 @@ function setMaxN(){
        "min" : totalN          // values (or variables) here
   });
 
+}
+
+function checkRoomsOccupied(){
+  var roomsOccupied = $('#no_rooms_occupied').val()*1;
+  
+  if(roomsOccupied === 0){
+    // If rooms occupied is zero, set overnight visitors and guest arrivals to zero
+    $("#no_stayed_overnight").val(0);
+    $("#nnc").val(0);
+    $("#nm").val(0);
+    $("#nf").val(0);
+    $("#lt").val(0);
+    $("#ft").val(0);
+    $("#of").val(0);
+    
+    // Clear details fields
+    $("#local_details").val("");
+    $("#foreign_details").val("");
+    $("#overseas_details").val("");
+    
+    // Disable fields when rooms occupied is zero
+    $("#no_stayed_overnight").prop("disabled", true);
+    $("#nnc").prop("disabled", true);
+    $("#nm").prop("disabled", true);
+    $("#nf").prop("disabled", true);
+    $("#lt").prop("disabled", true);
+    $("#ft").prop("disabled", true);
+    $("#of").prop("disabled", true);
+    
+  } else {
+    // Enable fields when rooms occupied is greater than zero
+    $("#no_stayed_overnight").prop("disabled", false);
+    $("#nnc").prop("disabled", false);
+    $("#nm").prop("disabled", false);
+    $("#nf").prop("disabled", false);
+    $("#lt").prop("disabled", false);
+    $("#ft").prop("disabled", false);
+    $("#of").prop("disabled", false);
+  }
 }
 
 

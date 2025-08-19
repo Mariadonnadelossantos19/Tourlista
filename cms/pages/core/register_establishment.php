@@ -56,12 +56,17 @@
                         <input type="text" name="contact_number" class="form-control" placeholder="Enter contact number" required>
                     </div>
                     <!-- /.form-group -->
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Email Address</label>
-                        <input type="email" name="email" class="form-control" placeholder="Enter email address" required>
-                    </div>
-                    <!-- /.form-group -->
-                    </div>
+                                         <div class="form-group">
+                         <label for="exampleInputEmail1">Email Address</label>
+                         <input type="email" name="email" class="form-control" placeholder="Enter email address" required>
+                     </div>
+                     <!-- /.form-group -->
+                     <div class="form-group">
+                         <label for="exampleInputEmail1">Website Link</label>
+                         <input type="url" name="website_link" class="form-control" placeholder="Enter website URL (e.g., https://www.example.com)" required>
+                     </div>
+                     <!-- /.form-group -->
+                     </div>
                     <div class="col-3">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Type of Establishment</label>
