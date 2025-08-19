@@ -73,7 +73,7 @@
                         left join region r on (r.region_c = t. region_c)
                         left join province p on (p.province_c = t.province_c) and (p.region_c = r.region_c)
                         left join citymun c on (c.citymun_c = t.citymun_c) and (c.province_c = p.province_c) and (c.region_c = r.region_c)
-                        where access_level < ".$_SESSION['level']." and
+                        where t.access_level < ".$_SESSION['level']." and
                         t.region_c = '".$region."' and t.province_c = '".$province."' order by ae_id desc";
                   }
                   if($_SESSION['level'] == '5'){
@@ -83,7 +83,7 @@
                         left join region r on (r.region_c = t. region_c)
                         left join province p on (p.province_c = t.province_c) and (p.region_c = r.region_c)
                         left join citymun c on (c.citymun_c = t.citymun_c) and (c.province_c = p.province_c) and (c.region_c = r.region_c)
-                        where access_level < ".$_SESSION['level']." and
+                        where t.access_level < ".$_SESSION['level']." and
                         t.region_c = '".$region."' order by ae_id desc";
                   }
 
@@ -108,7 +108,6 @@
                             if($row['request_edit']==2){
                               echo '<span class="badge badge-success">granted</span>';
                             }
-                          }
                         
                         echo '</td><td>';
 
@@ -158,6 +157,7 @@
                         </tr>';
                   $num++;
                 }
+                  }
                   ?>
 
                   </tbody>
