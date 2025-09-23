@@ -21,6 +21,25 @@ error_reporting(E_ERROR | E_PARSE);
 
   <script language = "javascript">
 
+  // Simple password visibility toggle function
+  function togglePasswordVisibility(fieldId) {
+    const passwordField = document.getElementById(fieldId);
+    const eyeIcon = document.getElementById(fieldId + '-eye');
+    
+    if (passwordField && eyeIcon) {
+      if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        eyeIcon.className = 'fas fa-eye-slash';
+      } else {
+        passwordField.type = 'password';
+        eyeIcon.className = 'fas fa-eye';
+      }
+    }
+  }
+
+  // Alternative jQuery implementation for better compatibility
+  // This will be moved to the bottom after jQuery is loaded
+
   function showLocation (x){
     if(x==5){
       document.getElementById("province").style.display = "none";
@@ -76,6 +95,52 @@ error_reporting(E_ERROR | E_PARSE);
       -moz-background-size: cover;
       -o-background-size: cover;
       background-size: cover;
+    }
+    
+    /* Password toggle button styling */
+    .password-toggle-btn {
+      position: absolute;
+      right: 35px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #6c757d;
+      transition: all 0.3s ease;
+      z-index: 15;
+      font-size: 16px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      min-width: 32px;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .password-toggle-btn:hover {
+      color: #007bff !important;
+      background: rgba(0, 123, 255, 0.1);
+      border-color: #007bff;
+      box-shadow: 0 2px 8px rgba(0,123,255,0.2);
+    }
+    
+    .password-toggle-btn:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+    
+    .password-toggle-btn i {
+      font-size: 14px;
+    }
+    
+    .form-group.has-feedback {
+      position: relative;
+    }
+    
+    .form-group.has-feedback .form-control {
+      padding-right: 80px;
     }
   </style>
 </head>
@@ -168,12 +233,18 @@ error_reporting(E_ERROR | E_PARSE);
         </div> -->
 
         <div class="form-group has-feedback">
-          <input name="password" type="password" class="form-control" placeholder="Password" autocomplete="off" required>
+          <input name="password" id="password" type="password" class="form-control" placeholder="Password" autocomplete="off" required>
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+          <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('password')">
+            <i class="fas fa-eye" id="password-eye"></i>
+          </button>
         </div>
         <div class="form-group has-feedback">
-          <input type="password" class="form-control" placeholder="Retype password" autocomplete="off" required>
+          <input type="password" id="confirmPassword" class="form-control" placeholder="Retype password" autocomplete="off" required>
           <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+          <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('confirmPassword')">
+            <i class="fas fa-eye" id="confirmPassword-eye"></i>
+          </button>
         </div>
         <div class="row">
           <div class="col-8">
@@ -209,5 +280,14 @@ error_reporting(E_ERROR | E_PARSE);
 <script src="../cms/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../cms/dist/js/adminlte.min.js"></script>
+
+<!-- Password Toggle Implementation -->
+<script>
+// Test function to verify elements are working
+$(document).ready(function() {
+  console.log('Password toggle buttons found:', $('.password-toggle-btn').length);
+  console.log('Font Awesome loaded:', typeof $ !== 'undefined' && $('.fas').length > 0);
+});
+</script>
 </body>
 </html>
