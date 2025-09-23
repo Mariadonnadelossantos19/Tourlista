@@ -153,6 +153,9 @@
             transition: none;
          }
       }
+
+      /* Page background color (design change only) */
+      body { background: linear-gradient(180deg, #edf7f6 0%, #ffffff 45%, #eef5f5 100%); }
    </style>
 
    <!-- Favicon with multiple sizes for better compatibility -->
