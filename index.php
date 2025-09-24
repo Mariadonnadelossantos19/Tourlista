@@ -475,7 +475,7 @@
                         <img src="assets/images/map.png" height="250" width="250" alt="Map exploration icon" loading="lazy" decoding="async">
                      </div>
                      <div class="button-wrapper">
-                        <a class="btn-solid-reg page-scroll" target="_blank" rel="noopener noreferrer" href="#" role="button" aria-label="Launch map exploration application">LAUNCH APP</a>
+                        <a class="btn-solid-reg page-scroll" target="_blank" rel="noopener noreferrer" href="assets/features/map.php" role="button" aria-label="Launch map exploration application">LAUNCH APP</a>
                      </div>
                   </div>
                </article> <!-- end of card -->

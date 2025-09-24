@@ -1,5 +1,5 @@
 <?php
-include '../connection/connection.php';
+include '../../cms/connection/connection.php';
 $sql = "Select * from accommodation_establishment where ae_name = '".$_GET['x']."'";
 //For the accommodation establishments
 $result = mysqli_query($conn, $sql);

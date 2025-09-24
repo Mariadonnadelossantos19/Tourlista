@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-include '../connection/connection.php';
+include '../../cms/connection/connection.php';
 $sql = "Select * from accommodation_establishment where approve_status = '1' and geolocation <> ''";
 $sql2 = "Select * from tourist_attraction where approve_status = '1' and geo_location <> ''";
 $accomp = "";

@@ -4,7 +4,7 @@
         <head>
           <title>Geolocation</title>
           <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-          <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
+          <link rel="stylesheet" href="../../../assets/css/bootstrap.css">
           <meta charset="utf-8">
                      <style>
              /* Always set the map height explicitly to define the size of the div
@@ -181,25 +181,56 @@
             var map, infoWindow, searchBox, markers = [];
 
             function clearLocation(){
-              initMap();
-              document.getElementById('location').value="";
-              parent.document.getElementById('location').value="";
-              // Clear all markers
-              markers.forEach(marker => marker.setMap(null));
-              markers = [];
+              try {
+                if (map) {
+                  // Reset map to default center
+                  map.setCenter({lat: 11.59, lng: 123.97});
+                  map.setZoom(10);
+                } else {
+                  initMap();
+                }
+                
+                document.getElementById('location').value="";
+                parent.document.getElementById('location').value="";
+                
+                // Clear all markers
+                markers.forEach(marker => marker.setMap(null));
+                markers = [];
+              } catch (error) {
+                console.error('Error clearing location:', error);
+                alert('Unable to clear location. Please refresh the page.');
+              }
             }
 
             function addMarker(location) {
-              // Clear existing markers
-              markers.forEach(marker => marker.setMap(null));
-              markers = [];
-              
-              var map = new google.maps.Map(
-                document.getElementById('map'), {zoom: 15, center: location});
-                var marker = new google.maps.Marker({position: location, map: map});
+              try {
+                // Clear existing markers
+                markers.forEach(marker => marker.setMap(null));
+                markers = [];
+                
+                if (!map) {
+                  console.error('Map not initialized');
+                  return;
+                }
+                
+                // Center map on location and add marker
+                map.setCenter(location);
+                map.setZoom(15);
+                
+                var marker = new google.maps.Marker({
+                  position: location, 
+                  map: map
+                });
                 markers.push(marker);
-                document.getElementById('location').value=location;
+                
+                // Update location value
+                var locationString = "(" + location.lat + "," + location.lng + ")";
+                document.getElementById('location').value = locationString;
                 parent.getLocation(location);
+              } catch (error) {
+                console.error('Error adding marker:', error);
+                alert('Unable to add marker. Please try again.');
+              }
             }
 
             function searchLocation() {
@@ -215,13 +246,18 @@
               searchInput.disabled = true;
               searchInput.placeholder = 'Searching...';
               
-              // Use Nominatim (OpenStreetMap) for geocoding - free and no API key required
-              var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(searchTerm) + '&limit=1';
+              // Use our PHP proxy to avoid CORS issues
+              var url = 'nominatim_proxy.php?q=' + encodeURIComponent(searchTerm) + '&limit=1';
               
               fetch(url)
-                .then(response => response.json())
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.status);
+                  }
+                  return response.json();
+                })
                 .then(data => {
-                  if (data && data.length > 0) {
+                  if (data && data.length > 0 && !data.error) {
                     var location = {
                       lat: parseFloat(data[0].lat),
                       lng: parseFloat(data[0].lon)
@@ -246,15 +282,17 @@
                     document.getElementById('location').value = locationString;
                     parent.document.getElementById('location').value = locationString;
                     
-                                         // Keep the search term in the input field so user can see what was searched
-                     // searchInput.value = ""; // Removed auto-clear
+                    // Keep the search term in the input field so user can see what was searched
+                    // searchInput.value = ""; // Removed auto-clear
+                  } else if (data.error) {
+                    alert('Search error: ' + data.error);
                   } else {
                     alert('Location not found. Please try a different search term.');
                   }
                 })
                 .catch(error => {
                   console.error('Error:', error);
-                  alert('Search failed. Please try again.');
+                  alert('Search failed. Please check your internet connection and try again.');
                 })
                 .finally(() => {
                   // Reset input
@@ -264,38 +302,47 @@
             }
 
             function initMap() {
-              map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 11.59, lng: 123.97},
-                zoom: 10
-              });
-
-            google.maps.event.addListener(map, 'click', function(event) {
-                  addMarker(event.latLng);
-            });
-
-              infoWindow = new google.maps.InfoWindow;
-
-              // Try HTML5 geolocation.
-              if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                  var pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                  };
-
-                  infoWindow.setPosition(pos);
-                  infoWindow.setContent('Your Location');
-                  infoWindow.open(map);
-                  map.setCenter(pos);
-                  parent.document.getElementById('location').value="("+pos.lat+","+pos.lng+")";
-                }, function() {
-                  handleLocationError(true, infoWindow, map.getCenter());
-
+              try {
+                map = new google.maps.Map(document.getElementById('map'), {
+                  center: {lat: 11.59, lng: 123.97},
+                  zoom: 10
                 });
-              } else {
-                // Browser doesn't support Geolocation
-                handleLocationError(false, infoWindow, map.getCenter());
+
+                google.maps.event.addListener(map, 'click', function(event) {
+                      addMarker(event.latLng);
+                });
+
+                infoWindow = new google.maps.InfoWindow;
+
+                // Try HTML5 geolocation.
+                if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(function(position) {
+                    var pos = {
+                      lat: position.coords.latitude,
+                      lng: position.coords.longitude
+                    };
+
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent('Your Location');
+                    infoWindow.open(map);
+                    map.setCenter(pos);
+                    parent.document.getElementById('location').value="("+pos.lat+","+pos.lng+")";
+                  }, function() {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                  });
+                } else {
+                  // Browser doesn't support Geolocation
+                  handleLocationError(false, infoWindow, map.getCenter());
+                }
+              } catch (error) {
+                console.error('Google Maps initialization error:', error);
+                showMapError('Google Maps failed to load. Please check your internet connection or contact support.');
               }
+            }
+
+            function showMapError(message) {
+              var mapContainer = document.getElementById('map');
+              mapContainer.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; background-color: #f8f9fa; border: 1px solid #dee2e6; color: #6c757d; font-family: Arial, sans-serif; text-align: center; padding: 20px;"><div><i style="font-size: 48px; margin-bottom: 10px;">🗺️</i><br><strong>Map Unavailable</strong><br><small>' + message + '</small></div></div>';
             }
 
             function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -314,6 +361,23 @@
                 }
               });
             });
+          </script>
+          <script>
+            // Global error handler for Google Maps API
+            window.gm_authFailure = function() {
+              console.error('Google Maps API authentication failed');
+              showMapError('Google Maps API key is invalid or billing is not enabled. Please contact support.');
+            };
+            
+            // Handle Google Maps API loading errors
+            window.onerror = function(msg, url, line, col, error) {
+              if (msg.includes('Google Maps') || msg.includes('BillingNotEnabledMapError')) {
+                console.error('Google Maps error:', msg);
+                showMapError('Google Maps is temporarily unavailable. Please try again later or contact support.');
+                return true;
+              }
+              return false;
+            };
           </script>
           <script async defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZ9X84e00BPQ_LHTqgapBqCKrkSwFPrFU&libraries=places,geocoding&callback=initMap">
