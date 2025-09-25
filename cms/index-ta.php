@@ -293,7 +293,7 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-primary elevation-4" style="position: fixed; top: 0; left: 0; height: 100vh; z-index: 1000;">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
       <img src="../assets/images/tl.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -557,7 +557,7 @@
 
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="margin-left: 250px;">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -715,7 +715,7 @@
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
@@ -730,7 +730,7 @@
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
           <!-- small box -->
           <div class="small-box bg-red">
             <div class="inner">
@@ -856,7 +856,7 @@
                     }
 
         ?>
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-pink"><i class="fa  fa-venus-mars"></i></span>
             <div class="info-box-content">
@@ -870,7 +870,7 @@
           <!-- /.info-box -->
         </div>
         <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-primary"><i class="fa fa-venus-mars"></i></span>
 
@@ -889,7 +889,7 @@
         <!-- fix for small devices only -->
         <div class="clearfix visible-sm-block"></div>
 
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-pink"><i class="fa fa-venus-mars"></i></span>
 
@@ -904,7 +904,7 @@
           <!-- /.info-box -->
         </div>
         <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-primary"><i class="fa fa-venus-mars"></i></span>
 
@@ -944,6 +944,150 @@
           <!-- /.box -->
         </div>
         <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <!-- Tourism Map Section -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">Tourism Map</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+              <div class="row">
+                <div class="col-md-12">
+                  <iframe src="../assets/features/map.php?show=ta" width="100%" height="400px"></iframe>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <!-- Tables Row -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Top 5 Accommodation Establishment</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin table-striped">
+                  <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Establishment</th>
+                    <th>Type</th>
+                    <th>Total Guest</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <?php
+                  include 'connection/connection.php';
+                      $sql = "select ae_name, type, sum(local_tourist+foreign_tourist) as total from ae_daily_task dt left join accommodation_establishment ae on dt.ae_id = ae.ae_id where approve_status = '1' group by dt.ae_id order by total desc limit 5";
+                      $result = mysqli_query($conn, $sql);
+                      $x = 1;
+                      if (mysqli_num_rows($result) > 0) {
+                        while($row = mysqli_fetch_assoc($result)) {
+                            echo "
+                            <tr>
+                            <td>".$x."</td>
+                            <td>".$row["ae_name"]."</td>
+                            <td><span class='label label-success'>".$row["type"]."</span></td>
+                            <td>".$row["total"]."</td>
+                            </tr>";
+                            $x++;
+                        }
+                      }
+                ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Establishments</a>
+            </div>
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+        </div>
+
+        <div class="col-md-6">
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title">Top 5 Tourist Attraction</h3>
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div class="table-responsive">
+              <table class="table no-margin table-striped">
+                <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Attraction</th>
+                  <th>Type</th>
+                  <th>Total Visitors</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                  include 'connection/connection.php';
+                      $sql = "select ta_name, ta_type, sum(nr_male+nr_female+r_male+r_female+fo_male+fo_female) as total from ta_daily_task dt left join tourist_attraction ta on dt.ta_id = ta.ta_id left join ta_type on ta.type = ta_type.ta_type_id where approve_status='1' group by dt.ta_id order by total desc limit 5";
+                      $result = mysqli_query($conn, $sql);
+                      $x = 1;
+                      if (mysqli_num_rows($result) > 0) {
+                        while($row = mysqli_fetch_assoc($result)) {
+                            echo "
+                            <tr>
+                            <td>".$x."</td>
+                            <td>".$row["ta_name"]."</td>
+                            <td><span class='label label-info'>".$row["ta_type"]."</span></td>
+                            <td>".$row["total"]."</td>
+                            </tr>";
+                            $x++;
+                        }
+                      }
+                ?>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.table-responsive -->
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer clearfix">
+            <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Attractions</a>
+          </div>
+          <!-- /.box-footer -->
+        </div>
+        <!-- /.box -->
+      </div>
       </div>
       <!-- /.row -->
 
@@ -1163,6 +1307,43 @@
     }]
 });
 
+  </script>
+  
+  <!-- Mobile Responsive JavaScript -->
+  <script>
+    $(document).ready(function() {
+      // Mobile sidebar toggle
+      $('[data-widget="pushmenu"]').on('click', function() {
+        $('#sidebar').toggleClass('show');
+      });
+      
+      // Close sidebar when clicking outside on mobile
+      $(document).on('click', function(e) {
+        if ($(window).width() <= 768) {
+          if (!$(e.target).closest('#sidebar, [data-widget="pushmenu"]').length) {
+            $('#sidebar').removeClass('show');
+          }
+        }
+      });
+      
+      // Handle window resize
+      $(window).on('resize', function() {
+        if ($(window).width() > 768) {
+          $('#sidebar').removeClass('show');
+        }
+      });
+      
+      // Smooth scrolling for anchor links
+      $('a[href^="#"]').on('click', function(e) {
+        e.preventDefault();
+        var target = $(this.getAttribute('href'));
+        if (target.length) {
+          $('html, body').animate({
+            scrollTop: target.offset().top - 70
+          }, 1000);
+        }
+      });
+    });
   </script>
 </body>
 </html>

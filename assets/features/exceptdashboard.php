@@ -59,7 +59,7 @@
               <span class="info-box-text">Accommodation Establishments</span>
               <span class="info-box-number">
                 <?php
-                    include '../connection/connection.php';
+                    include '../../cms/connection/connection.php';
                     $sql = "select count(*) as num from accommodation_establishment where approve_status = '1'";
                     $result = mysqli_query($conn, $sql);
                     if (mysqli_num_rows($result) > 0) {
@@ -84,7 +84,7 @@
               <span class="info-box-text">Tourist Attractions</span>
               <span class="info-box-number">
                  <?php
-                    include '../connection/connection.php';
+                    include '../../cms/connection/connection.php';
                     $sql = "select count(*) as num from tourist_attraction where approve_status = '1'";
                     $result = mysqli_query($conn, $sql);
                     if (mysqli_num_rows($result) > 0) {
@@ -114,7 +114,7 @@
               <span class="info-box-number">
 
                 <?php
-                    include '../connection/connection.php';
+                    include '../../cms/connection/connection.php';
                     $local_ae = 0;
                     $local_ta = 0;
                     $total = 0;
@@ -158,7 +158,7 @@
               <span class="info-box-text">Foreign Tourist</span>
               <span class="info-box-number">
                   <?php
-                    include '../connection/connection.php';
+                    include '../../cms/connection/connection.php';
                     $foreign_ae = 0;
                     $foreign_ta = 0;
                     $total = 0;
@@ -293,7 +293,7 @@
                   </thead>
                   <tbody>
                   <?php
-                  include '../connection/connection.php';
+                  include '../../cms/connection/connection.php';
                       $sql = "select ae_name, type, sum(local_tourist+foreign_tourist) as total from ae_daily_task dt left join accommodation_establishment ae on dt.ae_id = ae.ae_id where approve_status = '1' group by dt.ae_id order by total desc limit 5";
                       $result = mysqli_query($conn, $sql);
                       $x = 1;
@@ -350,7 +350,7 @@
                 </thead>
                 <tbody>
                 <?php
-                  include '../connection/connection.php';
+                  include '../../cms/connection/connection.php';
                       $sql = "select ta_name, ta_type, sum(nr_male+nr_female+r_male+r_female+fo_male+fo_female) as total from ta_daily_task dt left join tourist_attraction ta on dt.ta_id = ta.ta_id left join ta_type on ta.type = ta_type.ta_type_id where approve_status='1' group by dt.ta_id order by total desc limit 5";
                       $result = mysqli_query($conn, $sql);
                       $x = 1;
@@ -489,7 +489,7 @@
         data: 
         [
           <?php
-            include '../connection/connection.php';
+            include '../../cms/connection/connection.php';
             $date = array("1","2","3","4","5","6","7","8","9","10","11","12");
             $data = "";
             for($x = 0; $x<12; $x++){
@@ -516,7 +516,7 @@
         name: 'Local Tourist (TA)',
         data: [
         <?php
-            include '../connection/connection.php';
+            include '../../cms/connection/connection.php';
             $date = array("1","2","3","4","5","6","7","8","9","10","11","12");
             $data = "";
             for($x = 0; $x<12; $x++){
@@ -540,7 +540,7 @@
         name: 'Foreign Tourist (AE)',
         data: [
         <?php
-            include '../connection/connection.php';
+            include '../../cms/connection/connection.php';
             $date = array("1","2","3","4","5","6","7","8","9","10","11","12");
             $data = "";
             for($x = 0; $x<12; $x++){
@@ -566,7 +566,7 @@
         name: 'Foreign Tourist (TA)',
         data: [
         <?php
-            include '../connection/connection.php';
+            include '../../cms/connection/connection.php';
             $date = array("1","2","3","4","5","6","7","8","9","10","11","12");
             $data = "";
             for($x = 0; $x<12; $x++){

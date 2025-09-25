@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <?php
 include '../../cms/connection/connection.php';
+
+// Check if we should show only TA or both
+$show_only_ta = isset($_GET['show']) && $_GET['show'] == 'ta';
+$show_only_ae = isset($_GET['show']) && $_GET['show'] == 'ae';
+
 $sql = "Select * from accommodation_establishment where approve_status = '1' and geolocation <> ''";
 $sql2 = "Select * from tourist_attraction where approve_status = '1' and geo_location <> ''";
 $accomp = "";
 $attract = "";
 
-//For the accommodation establishments
-$result = mysqli_query($conn, $sql);
-  if (mysqli_num_rows($result) > 0) {
-      while($row = mysqli_fetch_assoc($result)) {
-        $accomp .="['".addslashes($row['ae_name'])."',".trim($row['geolocation'],'()').",".$row['ae_id']."],";
-      }
-  }
-$accomp = substr($accomp, 0, -1);
+//For the accommodation establishments (only if not showing TA only)
+if (!$show_only_ta) {
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+            $accomp .="['".addslashes($row['ae_name'])."',".trim($row['geolocation'],'()').",".$row['ae_id']."],";
+        }
+    }
+    $accomp = substr($accomp, 0, -1);
+}
 
-//For the tourist attractions
-
-$result2 = mysqli_query($conn, $sql2);
-  if (mysqli_num_rows($result2) > 0) {
-      while($row2 = mysqli_fetch_assoc($result2)) {
-        $attract .="['".addslashes($row2['ta_name'])."',".trim($row2['geo_location'],'()').",".$row2['ta_id']."],";
-      }
-  }
-$attract = substr($attract, 0, -1);
+//For the tourist attractions (only if not showing AE only)
+if (!$show_only_ae) {
+    $result2 = mysqli_query($conn, $sql2);
+    if (mysqli_num_rows($result2) > 0) {
+        while($row2 = mysqli_fetch_assoc($result2)) {
+            $attract .="['".addslashes($row2['ta_name'])."',".trim($row2['geo_location'],'()').",".$row2['ta_id']."],";
+        }
+    }
+    $attract = substr($attract, 0, -1);
+}
 ?>
 
 <html>
@@ -64,8 +72,13 @@ $attract = substr($attract, 0, -1);
           center: {lat: 12, lng: 120}
         });
 
+        <?php if (!$show_only_ta): ?>
         setMarkers(map);
+        <?php endif; ?>
+        
+        <?php if (!$show_only_ae): ?>
         setMarkers2(map);
+        <?php endif; ?>
       }
 
       // Data for the markers consisting of a name, a LatLng and a zIndex for the
