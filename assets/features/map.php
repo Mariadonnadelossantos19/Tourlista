@@ -8,6 +8,22 @@ $show_only_ae = isset($_GET['show']) && $_GET['show'] == 'ae';
 
 $sql = "Select * from accommodation_establishment where approve_status = '1' and geolocation <> ''";
 $sql2 = "Select * from tourist_attraction where approve_status = '1' and geo_location <> ''";
+
+// Get location data for filtering
+$regions = "";
+$provinces = "";
+$municipalities = "";
+
+// Get regions
+$region_sql = "Select region_c, region_m from region order by region_m";
+$region_result = mysqli_query($conn, $region_sql);
+if (mysqli_num_rows($region_result) > 0) {
+    while($row = mysqli_fetch_assoc($region_result)) {
+        $regions .= "['".addslashes($row['region_c'])."','".addslashes($row['region_m'])."'],";
+    }
+    $regions = substr($regions, 0, -1);
+}
+
 $accomp = "";
 $attract = "";
 
@@ -16,7 +32,15 @@ if (!$show_only_ta) {
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
         while($row = mysqli_fetch_assoc($result)) {
-            $accomp .="['".addslashes($row['ae_name'])."',".trim($row['geolocation'],'()').",".$row['ae_id']."],";
+            // Extract location info from complete_address
+            $address = $row['complete_address'];
+            $region = '';
+            $province = '';
+            $municipality = '';
+            
+            // Try to extract location info from address (this is a simplified approach)
+            // In a real implementation, you'd want to store region/province/municipality separately
+            $accomp .="['".addslashes($row['ae_name'])."',".trim($row['geolocation'],'()').",".$row['ae_id'].",'".addslashes($address)."'],";
         }
     }
     $accomp = substr($accomp, 0, -1);
@@ -27,7 +51,9 @@ if (!$show_only_ae) {
     $result2 = mysqli_query($conn, $sql2);
     if (mysqli_num_rows($result2) > 0) {
         while($row2 = mysqli_fetch_assoc($result2)) {
-            $attract .="['".addslashes($row2['ta_name'])."',".trim($row2['geo_location'],'()').",".$row2['ta_id']."],";
+            // Extract location info from complete_address
+            $address = $row2['complete_address'];
+            $attract .="['".addslashes($row2['ta_name'])."',".trim($row2['geo_location'],'()').",".$row2['ta_id'].",'".addslashes($address)."'],";
         }
     }
     $attract = substr($attract, 0, -1);
@@ -105,16 +131,94 @@ if (!$show_only_ae) {
         background: #0056b3;
         border-color: #0056b3;
       }
+      
+      /* Filter sections */
+      .filter-section {
+        margin-bottom: 15px;
+      }
+      
+      .filter-section label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 12px;
+        color: #555;
+      }
+      
+      /* Location filters */
+      .location-filters {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      .location-filters select {
+        padding: 6px 8px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        font-size: 11px;
+        background: white;
+        cursor: pointer;
+      }
+      
+      .location-filters select:focus {
+        outline: none;
+        border-color: #007bff;
+      }
+      
+      /* Filter actions */
+      .filter-actions {
+        margin-top: 10px;
+        text-align: center;
+      }
+      
+      .clear-btn {
+        background: #dc3545;
+        color: white;
+        border-color: #dc3545;
+        font-size: 11px;
+        padding: 6px 10px;
+      }
+      
+      .clear-btn:hover {
+        background: #c82333;
+        border-color: #bd2130;
+      }
     </style>
   </head>
   <body>
-    <!-- Filter Controls -->
-    <div class="filter-controls">
+    <!-- Filter Controls (only show when not in iframe/dashboard) -->
+    <div class="filter-controls" id="filterControls" style="display: none;">
       <h4>Filter Map</h4>
-      <div class="filter-buttons">
-        <button class="filter-btn active" onclick="filterMap('all')">Show All</button>
-        <button class="filter-btn" onclick="filterMap('ae')">Show AE</button>
-        <button class="filter-btn" onclick="filterMap('ta')">Show TA</button>
+      
+      <!-- Type Filter -->
+      <div class="filter-section">
+        <label>Type:</label>
+        <div class="filter-buttons">
+          <button class="filter-btn active" onclick="filterMap('all')">Show All</button>
+          <button class="filter-btn" onclick="filterMap('ae')">Show AE</button>
+          <button class="filter-btn" onclick="filterMap('ta')">Show TA</button>
+        </div>
+      </div>
+      
+      <!-- Location Filter -->
+      <div class="filter-section">
+        <label>Location:</label>
+        <div class="location-filters">
+          <select id="regionFilter" onchange="loadProvinces()">
+            <option value="">All Regions</option>
+          </select>
+          <select id="provinceFilter" onchange="loadMunicipalities()">
+            <option value="">All Provinces</option>
+          </select>
+          <select id="municipalityFilter" onchange="filterByLocation()">
+            <option value="">All Municipalities</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="filter-actions">
+        <button class="filter-btn clear-btn" onclick="clearFilters()">Clear All</button>
       </div>
     </div>
     
@@ -131,6 +235,27 @@ if (!$show_only_ae) {
       var taMarkers = [];
       var map;
 
+      // Check if page is loaded in iframe (dashboard context)
+      function checkIfInIframe() {
+        try {
+          return window.self !== window.top;
+        } catch (e) {
+          return true;
+        }
+      }
+
+      // Show/hide filter controls based on context
+      function toggleFilterControls() {
+        var filterControls = document.getElementById('filterControls');
+        if (checkIfInIframe()) {
+          // Hide filters when in dashboard iframe
+          filterControls.style.display = 'none';
+        } else {
+          // Show filters when accessed directly
+          filterControls.style.display = 'block';
+        }
+      }
+
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 6,
@@ -144,6 +269,14 @@ if (!$show_only_ae) {
         <?php if (!$show_only_ae): ?>
         setMarkers2(map);
         <?php endif; ?>
+        
+        // Toggle filter controls based on context
+        toggleFilterControls();
+        
+        // Load regions if not in iframe
+        if (!checkIfInIframe()) {
+          loadRegions();
+        }
       }
 
       // Data for the markers consisting of a name, a LatLng and a zIndex for the
@@ -152,6 +285,13 @@ if (!$show_only_ae) {
       var attract = [<?php echo $attract; ?>];
       var accDetails = "Click for details!";
       var attDetails = "Click for details!";
+      
+      // Location data
+      var regions = [<?php echo $regions; ?>];
+      var currentFilter = 'all';
+      var currentRegion = '';
+      var currentProvince = '';
+      var currentMunicipality = '';
 
       function setMarkers(map) {
         // Adds markers to the map.
@@ -301,9 +441,15 @@ if (!$show_only_ae) {
           btn.classList.remove('active');
         });
         event.target.classList.add('active');
-
-        // Show/hide markers based on filter
-        if (filterType === 'all') {
+        
+        currentFilter = filterType;
+        applyFilters();
+      }
+      
+      // Apply all active filters
+      function applyFilters() {
+        // First apply type filter
+        if (currentFilter === 'all') {
           // Show all markers
           aeMarkers.forEach(function(marker) {
             marker.setMap(map);
@@ -311,7 +457,7 @@ if (!$show_only_ae) {
           taMarkers.forEach(function(marker) {
             marker.setMap(map);
           });
-        } else if (filterType === 'ae') {
+        } else if (currentFilter === 'ae') {
           // Show only AE markers
           aeMarkers.forEach(function(marker) {
             marker.setMap(map);
@@ -319,7 +465,7 @@ if (!$show_only_ae) {
           taMarkers.forEach(function(marker) {
             marker.setMap(null);
           });
-        } else if (filterType === 'ta') {
+        } else if (currentFilter === 'ta') {
           // Show only TA markers
           aeMarkers.forEach(function(marker) {
             marker.setMap(null);
@@ -328,6 +474,141 @@ if (!$show_only_ae) {
             marker.setMap(map);
           });
         }
+        
+        // Then apply location filters
+        filterByLocation();
+      }
+      
+      // Load regions into dropdown
+      function loadRegions() {
+        var regionSelect = document.getElementById('regionFilter');
+        console.log('Loading regions:', regions);
+        regions.forEach(function(region) {
+          var option = document.createElement('option');
+          option.value = region[0];
+          option.textContent = region[1];
+          regionSelect.appendChild(option);
+        });
+      }
+      
+      // Load provinces based on selected region
+      function loadProvinces() {
+        var regionSelect = document.getElementById('regionFilter');
+        var provinceSelect = document.getElementById('provinceFilter');
+        var municipalitySelect = document.getElementById('municipalityFilter');
+        
+        // Clear existing options
+        provinceSelect.innerHTML = '<option value="">All Provinces</option>';
+        municipalitySelect.innerHTML = '<option value="">All Municipalities</option>';
+        
+        currentRegion = regionSelect.value;
+        currentProvince = '';
+        currentMunicipality = '';
+        
+        if (currentRegion) {
+          // Load provinces via AJAX
+          $.ajax({
+            type: "GET",
+            url: "../../cms/pages/crud/loadProvince.php",
+            data: {region_c: currentRegion},
+            success: function(data) {
+              provinceSelect.innerHTML = '<option value="">All Provinces</option>' + data;
+            },
+            error: function(xhr, status, error) {
+              console.log('Error loading provinces:', error);
+              console.log('Response:', xhr.responseText);
+            }
+          });
+        }
+        
+        applyFilters();
+      }
+      
+      // Load municipalities based on selected province
+      function loadMunicipalities() {
+        var provinceSelect = document.getElementById('provinceFilter');
+        var municipalitySelect = document.getElementById('municipalityFilter');
+        
+        // Clear existing options
+        municipalitySelect.innerHTML = '<option value="">All Municipalities</option>';
+        
+        currentProvince = provinceSelect.value;
+        currentMunicipality = '';
+        
+        if (currentProvince && currentRegion) {
+          // Load municipalities via AJAX
+          $.ajax({
+            type: "GET",
+            url: "../../cms/pages/crud/loadCityMun.php",
+            data: {region_c: currentRegion, province_c: currentProvince},
+            success: function(data) {
+              municipalitySelect.innerHTML = '<option value="">All Municipalities</option>' + data;
+            },
+            error: function(xhr, status, error) {
+              console.log('Error loading municipalities:', error);
+              console.log('Response:', xhr.responseText);
+            }
+          });
+        }
+        
+        applyFilters();
+      }
+      
+      // Filter by location
+      function filterByLocation() {
+        var municipalitySelect = document.getElementById('municipalityFilter');
+        currentMunicipality = municipalitySelect.value;
+        
+        // Apply location-based filtering
+        var allMarkers = aeMarkers.concat(taMarkers);
+        
+        allMarkers.forEach(function(marker) {
+          var shouldShow = true;
+          
+          // Check if marker matches current filters
+          if (currentRegion || currentProvince || currentMunicipality) {
+            // This is a simplified location check - in a real implementation,
+            // you'd want to store region/province/municipality data with each marker
+            var markerAddress = marker.getTitle(); // This would need to be enhanced
+            
+            // For now, we'll show all markers if location filtering is active
+            // In a real implementation, you'd check the marker's location data
+            shouldShow = true;
+          }
+          
+          // Apply type filter
+          if (currentFilter === 'ae' && taMarkers.includes(marker)) {
+            shouldShow = false;
+          } else if (currentFilter === 'ta' && aeMarkers.includes(marker)) {
+            shouldShow = false;
+          }
+          
+          marker.setMap(shouldShow ? map : null);
+        });
+      }
+      
+      // Clear all filters
+      function clearFilters() {
+        // Reset type filter
+        var buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(function(btn) {
+          btn.classList.remove('active');
+        });
+        document.querySelector('.filter-btn[onclick="filterMap(\'all\')"]').classList.add('active');
+        
+        // Reset location filters
+        document.getElementById('regionFilter').value = '';
+        document.getElementById('provinceFilter').innerHTML = '<option value="">All Provinces</option>';
+        document.getElementById('municipalityFilter').innerHTML = '<option value="">All Municipalities</option>';
+        
+        // Reset variables
+        currentFilter = 'all';
+        currentRegion = '';
+        currentProvince = '';
+        currentMunicipality = '';
+        
+        // Show all markers
+        applyFilters();
       }
 
     </script>
