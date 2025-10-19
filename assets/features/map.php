@@ -55,9 +55,69 @@ if (!$show_only_ae) {
         margin: 0;
         padding: 0;
       }
+      
+      /* Filter buttons styling */
+      .filter-controls {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 1000;
+        background: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        font-family: Arial, sans-serif;
+      }
+      
+      .filter-controls h4 {
+        margin: 0 0 10px 0;
+        font-size: 14px;
+        color: #333;
+      }
+      
+      .filter-buttons {
+        display: flex;
+        gap: 5px;
+      }
+      
+      .filter-btn {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        background: #f8f9fa;
+        cursor: pointer;
+        font-size: 12px;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+      }
+      
+      .filter-btn:hover {
+        background: #e9ecef;
+        border-color: #adb5bd;
+      }
+      
+      .filter-btn.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+      
+      .filter-btn.active:hover {
+        background: #0056b3;
+        border-color: #0056b3;
+      }
     </style>
   </head>
   <body>
+    <!-- Filter Controls -->
+    <div class="filter-controls">
+      <h4>Filter Map</h4>
+      <div class="filter-buttons">
+        <button class="filter-btn active" onclick="filterMap('all')">Show All</button>
+        <button class="filter-btn" onclick="filterMap('ae')">Show AE</button>
+        <button class="filter-btn" onclick="filterMap('ta')">Show TA</button>
+      </div>
+    </div>
+    
     <div id="map"></div>
     <script>
 
@@ -66,8 +126,13 @@ if (!$show_only_ae) {
       // to the base of the flagpole.
 
 
+      // Global variables for markers
+      var aeMarkers = [];
+      var taMarkers = [];
+      var map;
+
       function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+        map = new google.maps.Map(document.getElementById('map'), {
           zoom: 6,
           center: {lat: 12, lng: 120}
         });
@@ -126,6 +191,9 @@ if (!$show_only_ae) {
             zIndex: accomp[i][3]
           });
 
+          // Store marker in global array for filtering
+          aeMarkers.push(marker);
+
           var infoWindow = new google.maps.InfoWindow();
           google.maps.event.addListener(marker, 'mouseover', function () {
               var markerContent = this.getTitle();
@@ -179,6 +247,9 @@ if (!$show_only_ae) {
             zIndex: att[3]
           });
 
+          // Store marker in global array for filtering
+          taMarkers.push(marker);
+
           var infoWindow = new google.maps.InfoWindow();
           google.maps.event.addListener(marker, 'mouseover', function () {
               var markerContent = this.getTitle();
@@ -220,6 +291,43 @@ if (!$show_only_ae) {
             attDetails = data;
           }
         });
+      }
+
+      // Filter function to show/hide markers based on selection
+      function filterMap(filterType) {
+        // Update button states
+        var buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(function(btn) {
+          btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+
+        // Show/hide markers based on filter
+        if (filterType === 'all') {
+          // Show all markers
+          aeMarkers.forEach(function(marker) {
+            marker.setMap(map);
+          });
+          taMarkers.forEach(function(marker) {
+            marker.setMap(map);
+          });
+        } else if (filterType === 'ae') {
+          // Show only AE markers
+          aeMarkers.forEach(function(marker) {
+            marker.setMap(map);
+          });
+          taMarkers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+        } else if (filterType === 'ta') {
+          // Show only TA markers
+          aeMarkers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          taMarkers.forEach(function(marker) {
+            marker.setMap(map);
+          });
+        }
       }
 
     </script>
